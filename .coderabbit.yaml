@@ -1,0 +1,26 @@
+# CodeRabbit configuration for the AI Safety Jargon Glossary (public repo).
+# Docs: https://docs.coderabbit.ai/getting-started/configure-coderabbit
+language: "en-US"
+reviews:
+  profile: "chill"                 # friendlier, less nit-picky reviews
+  request_changes_workflow: false  # comments as suggestions, not hard blocks
+  high_level_summary: true
+  review_status: true
+  poem: false
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: "**"
+      instructions: >
+        This is a small, dependency-free, embeddable AI-safety glossary widget
+        (vanilla JS + a JSON term list), maintained by a non-technical product
+        manager with AI assistance, and embedded on third-party sites.
+        Prioritise: correctness; security and safe handling of untrusted input
+        (the widget fetches an external terms.json and renders definitions and
+        source links); accessibility (keyboard, screen readers, viewport-aware
+        tooltips); and clear, maintainable, framework-free code. Keep feedback
+        beginner-friendly and explain the "why". Flag any factual inaccuracies
+        in the AI-safety term definitions in terms.json.
+chat:
+  auto_reply: true
