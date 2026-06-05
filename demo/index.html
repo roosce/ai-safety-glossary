@@ -9,7 +9,15 @@
            font: 17px/1.6 Georgia, "Times New Roman", serif; color: #222; }
     .banner { font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.5;
               background: #eef3ff; border: 1px solid #cdd9ff; border-radius: 8px;
-              padding: 12px 14px; margin-bottom: 28px; color: #1f2a44; }
+              padding: 14px 16px; margin-bottom: 28px; color: #1f2a44; }
+    .banner-title { margin: 0 0 4px; font-size: 18px; }
+    .banner-lede { margin: 0 0 6px; }
+    .banner-h { font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+                color: #3a4a6b; margin: 12px 0 3px; }
+    .banner-p { margin: 0 0 6px; }
+    .banner-list { margin: 3px 0 6px; padding-left: 18px; }
+    .banner-list li { margin: 3px 0; }
+    .banner-try { margin: 12px 0 0; }
     h1 { font-size: 28px; line-height: 1.2; }
     h2 { font-size: 20px; margin-top: 32px; }
     .byline { font-family: system-ui, sans-serif; color: #777; font-size: 14px; }
@@ -17,16 +25,27 @@
 </head>
 <body>
   <div class="banner">
-    <strong>Live demo</strong> of the AI Safety Jargon Glossary widget.
-    Hover (or tap on mobile) any <u>underlined</u> term below to see a plain-English
-    definition — you never leave the page. Only the first mention of each term is
-    marked, to avoid clutter.
-    <br><br>
-    <em>Note:</em> the widget loads definitions from <code>terms.json</code> via
-    <code>fetch</code>, so view this over a local server, not a <code>file://</code>
-    URL — e.g. from the <code>glossary/</code> folder run
-    <code>python3 -m http.server</code> and open
-    <code>/demo/</code>.
+    <h2 class="banner-title">AI Safety Jargon Glossary</h2>
+    <p class="banner-lede">
+      A drop-in widget that adds plain-English, hover-to-read definitions of AI-safety
+      jargon to any web page — so newcomers don't get stuck on terms like <em>RLHF</em>
+      or <em>mesa-optimizer</em>. Below is a sample article with the widget switched on.
+    </p>
+
+    <h3 class="banner-h">How it works</h3>
+    <p class="banner-p">
+      It scans the page, underlines the <strong>first mention</strong> of each known term,
+      and shows the definition on <strong>hover or tap</strong> — the reader never leaves the page.
+    </p>
+
+    <h3 class="banner-h">Where the definitions &amp; sources come from</h3>
+    <ul class="banner-list">
+      <li>Each definition is a concise, <strong>plain-English summary written for newcomers</strong> — our own wording, not copied from any single place.</li>
+      <li>Every term carries a <strong>“Source:” link</strong> to an authoritative reference for the concept — the original paper or a well-respected explainer (e.g. Hubinger&nbsp;et&nbsp;al., Anthropic, DeepMind, RAND; Wikipedia for broad terms).</li>
+      <li>We pick the <strong>canonical reference the idea comes from</strong>, so you can read further and judge the definition yourself. Corrections are welcome.</li>
+    </ul>
+
+    <p class="banner-try"><strong>Try it:</strong> hover (or tap on mobile) any <u>underlined</u> term below to see its definition and source.</p>
   </div>
 
   <article id="article">
