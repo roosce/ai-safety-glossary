@@ -27,7 +27,7 @@
   var BASE_CSS =
     ".glossary-term{border-bottom:1px dotted currentColor;cursor:help}" +
     ".glossary-term:focus{outline:2px solid #4a7dff;outline-offset:2px}" +
-    ".glossary-tip{position:absolute;z-index:2147483647;max-width:280px;padding:8px 10px;" +
+    ".glossary-tip{position:fixed;z-index:2147483647;max-width:280px;max-height:calc(100vh - 16px);overflow:auto;padding:8px 10px;" +
     "font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#fff;" +
     "background:#1f2430;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.25)}" +
     ".glossary-tip[hidden]{display:none}" +
@@ -198,7 +198,8 @@
 
   /**
    * Show the shared tooltip for a term span: its definition plus, if present, a
-   * "Source:" link. Positioned just below the term and clamped to the viewport.
+   * "Source:" link. Uses position:fixed; placed below the term (or flipped
+   * above near the viewport bottom) and clamped to the viewport on all sides.
    * @param {HTMLElement} el - The hovered/focused .glossary-term span.
    */
   function showTip(el) {
@@ -225,10 +226,19 @@
       tip.appendChild(src);
     }
     tip.hidden = false;
+    // position:fixed, so coordinates are viewport-relative (no scroll offsets).
     var r = el.getBoundingClientRect();
-    var maxLeft = window.scrollX + document.documentElement.clientWidth - tip.offsetWidth - 8;
-    tip.style.top = window.scrollY + r.bottom + 6 + "px";
-    tip.style.left = Math.max(8, Math.min(window.scrollX + r.left, maxLeft)) + "px";
+    var gap = 6, margin = 8;
+    var tipW = tip.offsetWidth, tipH = tip.offsetHeight;
+    var vw = document.documentElement.clientWidth, vh = window.innerHeight;
+    // Flip above when there isn't room below but there is above...
+    var flipUp = (r.bottom + gap + tipH > vh) && (r.top - gap - tipH >= 0);
+    var top = flipUp ? (r.top - gap - tipH) : (r.bottom + gap);
+    // ...then clamp to the viewport so it's never cut off at any edge.
+    top = Math.max(margin, Math.min(top, vh - tipH - margin));
+    var left = Math.max(margin, Math.min(r.left, vw - tipW - margin));
+    tip.style.top = top + "px";
+    tip.style.left = left + "px";
   }
 
   /**
