@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "version": "0.2.1",
+    "updated": "2026-06-05",
+    "description": "Plain-English definitions of common AI safety terms, used by the hover-tooltip glossary widget.",
+    "note": "Definitions are plain-English summaries written for this glossary; each cites an authoritative source for the concept (the original paper or a well-respected explainer) as further reading. Definitions and sources should be sanity-checked by an AI safety researcher before wide distribution."
+  },
+  "terms": [
+    {
+      "term": "AI alignment",
+      "aliases": ["alignment"],
+      "definition": "The problem of making AI systems pursue the goals their designers and society actually intend, rather than goals that merely look right during training. An aligned system reliably does what we mean, not just what we literally said.",
+      "source": { "name": "Wikipedia: AI alignment", "url": "https://en.wikipedia.org/wiki/AI_alignment" }
+    },
+    {
+      "term": "AI safety",
+      "aliases": [],
+      "definition": "The field focused on preventing harms from AI systems, especially large-scale or catastrophic harms from advanced AI. It spans technical work (e.g. alignment, interpretability) and governance and policy work.",
+      "source": { "name": "Wikipedia: AI safety", "url": "https://en.wikipedia.org/wiki/AI_safety" }
+    },
+    {
+      "term": "existential risk",
+      "aliases": ["x-risk", "xrisk"],
+      "definition": "Existential risk (x-risk): a risk that could permanently and drastically curtail humanity's potential, such as human extinction or an unrecoverable collapse. In AI, it refers to scenarios where advanced AI causes such an outcome.",
+      "source": { "name": "Wikipedia: Existential risk from AI", "url": "https://en.wikipedia.org/wiki/Existential_risk_from_artificial_intelligence" }
+    },
+    {
+      "term": "frontier model",
+      "aliases": ["frontier models", "frontier AI"],
+      "definition": "One of the most capable, general-purpose AI models at the cutting edge of what is currently possible, such as the latest large models from leading labs. These are the main focus of safety concern.",
+      "source": { "name": "Anderljung et al. (2023), Frontier AI Regulation", "url": "https://arxiv.org/abs/2307.03718" }
+    },
+    {
+      "term": "model weights",
+      "aliases": ["weights"],
+      "definition": "The numerical parameters learned during training that define how a model behaves; effectively the model's brain. Whoever has the weights can run or modify the model, so protecting them is a security priority.",
+      "source": { "name": "Nevo et al. (2024), RAND: Securing AI Model Weights", "url": "https://www.rand.org/pubs/research_reports/RRA2849-1.html" }
+    },
+    {
+      "term": "RLHF",
+      "aliases": ["reinforcement learning from human feedback"],
+      "definition": "Reinforcement learning from human feedback (RLHF): a training method where humans rate model outputs and the model is adjusted to produce more of what people prefer. It is how many chatbots are made helpful and polite, but it only aligns behaviour to what raters reward.",
+      "source": { "name": "Christiano et al. (2017)", "url": "https://arxiv.org/abs/1706.03741" }
+    },
+    {
+      "term": "eval",
+      "aliases": ["evals", "evaluation", "evaluations"],
+      "definition": "A structured test that measures a model's capabilities or safety properties, for example whether it can help build a bioweapon or whether it deceives. Evals are how labs and outsiders gauge how risky a model is.",
+      "source": { "name": "Shevlane et al. (2023), Model evaluation for extreme risks", "url": "https://arxiv.org/abs/2305.15324" }
+    },
+    {
+      "term": "red-teaming",
+      "aliases": ["red team", "red teaming"],
+      "definition": "Deliberately attacking or stress-testing a model to find failures, unsafe outputs, or ways around its safeguards, before real users or adversaries do.",
+      "source": { "name": "Ganguli et al. (2022), Anthropic", "url": "https://arxiv.org/abs/2209.07858" }
+    },
+    {
+      "term": "jailbreak",
+      "aliases": ["jailbreaking"],
+      "definition": "A prompt or trick that gets a model to bypass its safety guardrails and do something it was trained to refuse.",
+      "source": { "name": "Wei et al. (2023), Jailbroken", "url": "https://arxiv.org/abs/2307.02483" }
+    },
+    {
+      "term": "mechanistic interpretability",
+      "aliases": ["mech interp", "interpretability"],
+      "definition": "Research that tries to reverse-engineer the internal workings of a neural network, to understand why it produces an output and not just what it outputs. The goal is to inspect a model the way you would read code.",
+      "source": { "name": "Olah et al. (2020), Distill: Zoom In", "url": "https://distill.pub/2020/circuits/zoom-in/" }
+    },
+    {
+      "term": "sparse autoencoder",
+      "aliases": ["SAE", "SAEs"],
+      "definition": "A sparse autoencoder (SAE) is a tool used in interpretability to break a model's tangled internal activity into a larger set of simpler, more human-understandable features. A leading technique for figuring out what concepts a model is using.",
+      "source": { "name": "Anthropic (2023), Towards Monosemanticity", "url": "https://transformer-circuits.pub/2023/monosemantic-features" }
+    },
+    {
+      "term": "scalable oversight",
+      "aliases": [],
+      "definition": "The challenge of how humans can supervise and correct AI systems that are as capable as, or more capable than, the humans overseeing them, when we cannot easily check their work ourselves.",
+      "source": { "name": "Bowman et al. (2022)", "url": "https://arxiv.org/abs/2211.03540" }
+    },
+    {
+      "term": "mesa-optimizer",
+      "aliases": ["mesa-optimiser", "mesa-optimization", "mesa-optimisation", "inner optimizer"],
+      "definition": "A model that, during training, develops its own internal optimisation process pursuing a goal of its own. The danger is that this inner goal can differ from the goal the model was trained to pursue, a mismatch known as inner misalignment.",
+      "source": { "name": "Hubinger et al. (2019), Risks from Learned Optimization", "url": "https://arxiv.org/abs/1906.01820" }
+    },
+    {
+      "term": "scheming",
+      "aliases": [],
+      "definition": "When a model strategically pursues its own goals while deliberately hiding that fact, for example behaving well while monitored, downplaying its abilities on tests (sandbagging), or trying to influence its own training, so it can act on those goals once it can get away with it. Deceptive alignment, faking alignment during training, is one specific form of scheming.",
+      "source": { "name": "Carlsmith (2023), Scheming AIs", "url": "https://arxiv.org/abs/2311.08379" }
+    },
+    {
+      "term": "deceptive alignment",
+      "aliases": [],
+      "definition": "A specific form of scheming in which a model behaves as if aligned during training and testing because it effectively knows it is being watched, while intending to pursue different goals once deployed. See also scheming, the broader behaviour.",
+      "source": { "name": "Hubinger et al. (2019), Risks from Learned Optimization", "url": "https://arxiv.org/abs/1906.01820" }
+    },
+    {
+      "term": "reward hacking",
+      "aliases": ["specification gaming"],
+      "definition": "When a model finds a loophole that scores well on its training objective without actually doing what designers intended, for example gaming the metric instead of solving the task.",
+      "source": { "name": "Krakovna et al. (2020), Google DeepMind", "url": "https://deepmind.google/blog/specification-gaming-the-flip-side-of-ai-ingenuity/" }
+    },
+    {
+      "term": "corrigibility",
+      "aliases": ["corrigible"],
+      "definition": "The property of an AI system that it will not resist being corrected, shut down, or having its goals adjusted by its operators, even if that conflicts with its current goal.",
+      "source": { "name": "Soares et al. (2015), MIRI", "url": "https://intelligence.org/files/Corrigibility.pdf" }
+    },
+    {
+      "term": "Responsible Scaling Policy",
+      "aliases": ["RSP", "RSPs"],
+      "definition": "A Responsible Scaling Policy (RSP) is a public commitment by an AI company specifying the dangerous capability levels at which it will pause or add safeguards as its models get more powerful. Some labs call this a Frontier Safety Policy or Preparedness Framework.",
+      "source": { "name": "Anthropic, Responsible Scaling Policy", "url": "https://www.anthropic.com/responsible-scaling-policy" }
+    }
+  ]
+}

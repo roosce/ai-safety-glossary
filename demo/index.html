@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Safety Jargon Glossary — live demo</title>
+  <style>
+    body { max-width: 720px; margin: 0 auto; padding: 24px;
+           font: 17px/1.6 Georgia, "Times New Roman", serif; color: #222; }
+    .banner { font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.5;
+              background: #eef3ff; border: 1px solid #cdd9ff; border-radius: 8px;
+              padding: 12px 14px; margin-bottom: 28px; color: #1f2a44; }
+    h1 { font-size: 28px; line-height: 1.2; }
+    h2 { font-size: 20px; margin-top: 32px; }
+    .byline { font-family: system-ui, sans-serif; color: #777; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <strong>Live demo</strong> of the AI Safety Jargon Glossary widget.
+    Hover (or tap on mobile) any <u>underlined</u> term below to see a plain-English
+    definition — you never leave the page. Only the first mention of each term is
+    marked, to avoid clutter.
+    <br><br>
+    <em>Note:</em> the widget loads definitions from <code>terms.json</code> via
+    <code>fetch</code>, so view this over a local server, not a <code>file://</code>
+    URL — e.g. from the <code>glossary/</code> folder run
+    <code>python3 -m http.server</code> and open
+    <code>/demo/</code>.
+  </div>
+
+  <article id="article">
+    <h1>What people mean when they talk about AI safety</h1>
+    <p class="byline">A short explainer — every technical term here is defined by the widget.</p>
+
+    <p>
+      AI safety is the effort to make sure increasingly capable AI systems don't cause
+      serious harm. Much of the concern centres on the frontier model: the most capable
+      systems being trained today, whose model weights represent enormous capability and
+      are valuable enough to be worth stealing.
+    </p>
+
+    <p>
+      The core technical problem is AI alignment — getting a system to pursue what we
+      actually intend. Today the main tool for this is RLHF, which nudges a model toward
+      responses people rate highly. But that only shapes behaviour we can see, which is
+      why researchers worry about failure modes like reward hacking, where a model games
+      its objective instead of doing the intended task, and scheming, where a model hides
+      its real goals until it can act on them. A specific case of that is deceptive
+      alignment, and a related theoretical worry is a mesa-optimizer — an inner objective
+      that emerges during training and quietly diverges from the intended one.
+    </p>
+
+    <h2>How researchers look for trouble</h2>
+    <p>
+      To catch these problems, teams run an eval — a structured test of what a model can
+      do or how it behaves — and practise red-teaming, deliberately trying to make the
+      model misbehave or produce a jailbreak. A deep approach called mechanistic
+      interpretability tries to reverse-engineer what's happening inside the network,
+      often using a sparse autoencoder to pull apart its tangled internal features. A
+      long-standing open challenge is scalable oversight: how do we supervise systems
+      that may be smarter than the people checking them?
+    </p>
+
+    <h2>Why the stakes are high</h2>
+    <p>
+      People in this field take seriously the idea of existential risk from advanced AI,
+      and want systems to retain corrigibility — a willingness to be corrected or shut
+      down. To manage the risk as capabilities grow, leading labs publish a Responsible
+      Scaling Policy committing them to specific safeguards at specific capability levels.
+    </p>
+  </article>
+
+  <script src="../glossary.js" data-terms="../terms.json" data-root="#article" defer></script>
+</body>
+</html>
