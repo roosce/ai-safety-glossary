@@ -219,6 +219,44 @@ kbd {
   outline-offset: 2px;
 }
 
+/* ---- Try it now ---- */
+.tryit-intro {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
+/* Idle until E3 fills it on the "ais-glossary-ready" event; then a success pill. */
+#tryit-status:empty { display: none; }
+
+#tryit-status {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  font-weight: 600;
+  color: var(--accent-strong);
+  background: rgba(47, 158, 143, .12);
+  border: 1px solid rgba(47, 158, 143, .35);
+  border-radius: 8px;
+}
+
+.tryit-article {
+  margin: 0;
+  padding: 24px 28px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+}
+
+.tryit-article h3 { margin: 0 0 12px; font-size: 18px; }
+
+.tryit-article p {
+  margin: 0 0 14px;
+  font: 17px/1.7 Georgia, "Times New Roman", serif;
+  color: #2a2f3a;
+}
+
+.tryit-article p:last-child { margin-bottom: 0; }
+
 /* ---- Per-page note ---- */
 .page-note {
   margin-top: 48px;
