@@ -27,8 +27,12 @@
   var SKIP = { A: 1, BUTTON: 1, CODE: 1, PRE: 1, SCRIPT: 1, STYLE: 1, TEXTAREA: 1, NOSCRIPT: 1, KBD: 1 };
 
   var BASE_CSS =
-    ".glossary-term{border-bottom:1px dotted currentColor;cursor:help}" +
-    ".glossary-term:focus{outline:2px solid #4a7dff;outline-offset:2px}" +
+    // Design A: teal highlight tint + trailing accent (i) glyph.
+    ".glossary-term{background:rgba(47,158,143,.16);border-radius:.2em;padding:0 .12em;" +
+    "box-decoration-break:clone;-webkit-box-decoration-break:clone;cursor:help}" +
+    ".glossary-term::after{content:\"\\24D8\";margin-left:.12em;font-size:.85em;" +
+    "color:#2f9e8f;vertical-align:baseline}" +
+    ".glossary-term:focus{outline:2px solid #2f9e8f;outline-offset:2px}" +
     ".glossary-tip{position:fixed;z-index:2147483647;max-width:280px;max-height:calc(100vh - 16px);overflow:auto;padding:8px 10px;" +
     "font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#fff;" +
     "background:#1f2430;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.25)}" +
