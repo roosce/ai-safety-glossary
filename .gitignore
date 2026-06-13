@@ -1,0 +1,4 @@
+# Generated bookmarklet build outputs (regenerate with: node bookmarklet/build.js)
+bookmarklet/bookmarklet.txt
+bookmarklet/widget-styles.css
+bookmarklet/install.html
