@@ -187,12 +187,22 @@
   var COPY_DONE = "Copied ✓";
   var COPY_FAIL = "Press ⌘/Ctrl+C to copy";
   var copyResetTimer = null;
+  var copyStatus = null; // visually-hidden live region for screen-reader feedback
+
+  function isBookmarkletCode(text) {
+    return /^javascript:/i.test((text || "").trim());
+  }
 
   // The text the Copy button offers, read live from #bookmarklet-code so it
-  // reflects whatever the build embedded or applyCode() injected.
+  // reflects whatever the build embedded or applyCode() injected. That element
+  // is a <textarea>, so .value is the source of truth (textContent as fallback);
+  // we only return it if it's actually a bookmarklet, matching resolveCode().
   function codeToCopy() {
     var el = byId("bookmarklet-code");
-    return el ? (el.textContent || "").trim() : "";
+    if (!el) return "";
+    var raw = typeof el.value === "string" ? el.value : (el.textContent || "");
+    var code = raw.trim();
+    return isBookmarkletCode(code) ? code : "";
   }
 
   // Copy via a throwaway textarea + execCommand — the fallback for http/older
@@ -222,12 +232,15 @@
     return legacyCopy(text);
   }
 
-  // Flash a transient label on the button, then restore the idle label.
+  // Flash a transient label on the button, mirror it into the live region so
+  // screen-reader users hear the result, then restore the idle label.
   function flash(btn, label) {
     btn.textContent = label;
+    if (copyStatus) copyStatus.textContent = label;
     if (copyResetTimer) clearTimeout(copyResetTimer);
     copyResetTimer = setTimeout(function () {
       btn.textContent = COPY_IDLE;
+      if (copyStatus) copyStatus.textContent = "";
       copyResetTimer = null;
     }, 2000);
   }
@@ -240,6 +253,16 @@
     var btn = byId("copy-code-btn");
     if (!btn) return function () {};
     if (!(btn.textContent || "").trim()) btn.textContent = COPY_IDLE;
+
+    // Visually-hidden status node (reuses the page's .sr-only utility) so copy
+    // feedback is announced to assistive tech, not just shown in the button.
+    if (!copyStatus) {
+      copyStatus = document.createElement("span");
+      copyStatus.className = "sr-only";
+      copyStatus.setAttribute("role", "status");
+      copyStatus.setAttribute("aria-live", "polite");
+      (btn.parentNode || document.body).appendChild(copyStatus);
+    }
 
     function refresh() {
       var hasCode = !!codeToCopy();
