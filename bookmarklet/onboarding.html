@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Safety Glossary — add hover definitions to any page</title>
+<meta name="description" content="A one-click bookmarklet that adds plain-English hover definitions of AI safety jargon to any article you read. Nothing installed, no tracking.">
+<link rel="stylesheet" href="onboarding.css">
+<!-- Single source of truth for the term + tooltip look (Design A): build.js emits
+     widget-styles.css so the demo below renders exactly like the real widget. -->
+<link rel="stylesheet" href="widget-styles.css">
+</head>
+<body>
+  <!-- Desktop-only: installing a bookmarklet means dragging to a bookmarks bar,
+       which mobile browsers don't have. Shown only on narrow screens. -->
+  <div class="desktop-banner" role="note">
+    This tool is desktop-only — it installs to your browser's bookmarks bar.
+    Open this page on a computer to set it up.
+  </div>
+
+  <main class="page">
+
+    <!-- HERO -->
+    <header class="hero">
+      <p class="eyebrow">AI Safety Glossary</p>
+      <h1>Stop bouncing on jargon.</h1>
+      <p class="lede">
+        One click adds plain-English hover definitions of AI safety terms —
+        “RSP”, “scalable oversight”, “mesa-optimiser” — to any article you read.
+      </p>
+    </header>
+
+    <!-- 1 · LIVE DEMO (filled by: onboarding-demo-section) -->
+    <section class="block" aria-labelledby="demo-h">
+      <h2 id="demo-h" class="section-label">See it in action</h2>
+      <div id="demo"></div>
+    </section>
+
+    <!-- 2 · WHAT IT IS + TRUST -->
+    <section class="block" aria-labelledby="about-h">
+      <h2 id="about-h">What it is</h2>
+      <p>
+        A tiny bookmark that highlights known AI-safety terms on whatever page
+        you're reading and shows a short definition (and its source) when you
+        hover. You stay in the article — no new tabs, no looking things up.
+      </p>
+      <p class="trust">
+        Nothing installed, no permissions, no tracking; it runs only when you
+        click it.
+      </p>
+    </section>
+
+    <!-- 3 · INSTALL + FALLBACK (filled by: onboarding-install-fallback) -->
+    <section class="block" aria-labelledby="install-h">
+      <h2 id="install-h">Install it (once)</h2>
+      <div id="install-steps"></div>
+      <a id="install-btn" href="#"></a>
+      <div class="fallback">
+        <button id="copy-code-btn" type="button" hidden></button>
+        <textarea id="bookmarklet-code" readonly hidden></textarea>
+      </div>
+    </section>
+
+    <!-- 4 · TRY IT NOW (filled by: onboarding-tryit) -->
+    <section class="block" aria-labelledby="tryit-h">
+      <h2 id="tryit-h">Try it now</h2>
+      <div id="tryit"></div>
+      <p id="tryit-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <!-- 5 · PER-PAGE NOTE -->
+    <footer class="page-note">
+      <p>Click the bookmark once on each new article to annotate it.</p>
+    </footer>
+
+  </main>
+</body>
+</html>
