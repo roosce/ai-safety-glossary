@@ -5,6 +5,7 @@
  */
 :root {
   --accent: #2f9e8f;          /* teal — matches the term tint + ⓘ glyph */
+  --accent-strong: #1f766b;   /* darker teal for interactive text — WCAG AA (~5.4:1) */
   --ink: #1f2430;             /* primary text / dark surfaces */
   --muted: #667;             /* secondary text */
   --line: #e4e6ea;            /* hairline borders */
@@ -13,6 +14,19 @@
 }
 
 * { box-sizing: border-box; }
+
+/* Visually hidden but available to screen readers. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 html { -webkit-text-size-adjust: 100%; }
 
@@ -150,7 +164,7 @@ kbd {
 
 .fallback > summary {
   cursor: pointer;
-  color: var(--accent);
+  color: var(--accent-strong);
   font-weight: 600;
 }
 
@@ -175,7 +189,7 @@ kbd {
   font: inherit;
   font-weight: 600;
   color: #fff;
-  background: var(--accent);
+  background: var(--accent-strong);
   border: 0;
   border-radius: 8px;
   cursor: pointer;
