@@ -464,11 +464,14 @@
   function onGlossaryReady(e) {
     var status = byId("tryit-status");
     if (!status) return;
-    var count = (e && e.detail && typeof e.detail.count === "number") ? e.detail.count : null;
+    var count = e && e.detail ? e.detail.count : null;
+    // Document-level custom event on an embedded page — ignore malformed payloads
+    // (missing / non-finite / negative) so a stray event can't clobber success.
+    if (typeof count !== "number" || !isFinite(count) || count < 0) return;
     // Re-clicking the bookmark re-runs the widget and can report 0 new terms
     // (everything's already highlighted) — don't overwrite an earlier success.
     if (count === 0 && tryitSucceeded) return;
-    if (count && count > 0) {
+    if (count > 0) {
       status.textContent = "✓ It’s working — " + count + " term" + (count === 1 ? "" : "s") +
         " highlighted on this page. Hover one to read its definition.";
       tryitSucceeded = true;
