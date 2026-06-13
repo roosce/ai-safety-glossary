@@ -91,7 +91,98 @@
     if (codeEl && !wasEmbedded) codeEl.textContent = code;
   }
 
+  // --- behavior-browser-detect: tailored install steps ----------------------
+
+  // Identify the desktop browser from the UA string. Order matters: Edge and
+  // Opera UAs also contain "Chrome", and Chrome's also contains "Safari".
+  function detectBrowser() {
+    var ua = navigator.userAgent || "";
+    if (/\bEdg(?:e|A|iOS)?\//.test(ua)) return "edge";
+    if (/\bFirefox\//.test(ua)) return "firefox";
+    if (/\b(?:OPR|Opera)\//.test(ua)) return "chrome"; // Chromium-based: same flow
+    if (/\bChrom(?:e|ium)\//.test(ua)) return "chrome";
+    if (/\bSafari\//.test(ua) && /\bVersion\//.test(ua)) return "safari";
+    return "other";
+  }
+
+  function isMac() {
+    var p = (navigator.userAgentData && navigator.userAgentData.platform) ||
+            navigator.platform || navigator.userAgent || "";
+    return /Mac/i.test(p);
+  }
+
+  function kbd(text) {
+    var k = document.createElement("kbd");
+    k.textContent = text;
+    return k;
+  }
+
+  // Toggle-bookmarks-bar shortcut (Chrome/Edge/Firefox share it), per platform.
+  function barShortcut() {
+    return isMac() ? "⌘⇧B" : "Ctrl+Shift+B";
+  }
+
+  // Ordered install steps for the detected browser. Each step is an array of
+  // strings / inline nodes appended into an <li>.
+  function installSteps(browser) {
+    var DRAG = "Drag the “📘 AI Safety Glossary” button above onto the bar.";
+    var USE = "Open any article, click the bookmark, and hover a highlighted term to read its definition.";
+    switch (browser) {
+      case "edge":
+      case "chrome":
+        return [
+          ["Show the bookmarks bar — press ", kbd(barShortcut()),
+           " (or menu ▸ Bookmarks ▸ Show bookmarks bar)."],
+          [DRAG],
+          [USE]
+        ];
+      case "firefox":
+        return [
+          ["Show the bookmarks toolbar — press ", kbd(barShortcut()),
+           " (or right-click the toolbar ▸ Bookmarks Toolbar ▸ Always Show)."],
+          [DRAG],
+          [USE]
+        ];
+      case "safari":
+        // Safari won't let you drag a javascript: bookmark, so edit one by hand.
+        return [
+          ["Show the Favourites bar — ", kbd("⌘⇧B"),
+           " (View ▸ Show Favourites Bar)."],
+          ["Bookmark this page with ", kbd("⌘D"), " and save it to Favourites."],
+          ["Copy the code with the Copy button below, then right-click the new " +
+           "bookmark ▸ Edit Address and paste the code as its address."],
+          [USE]
+        ];
+      default:
+        return [
+          ["Show your browser’s bookmarks/favourites bar (often ", kbd(barShortcut()), ")."],
+          [DRAG + " If your browser blocks dragging javascript: bookmarks, copy the code " +
+           "below and paste it as a new bookmark’s address instead."],
+          [USE]
+        ];
+    }
+  }
+
+  // Replace #install-steps with steps tailored to the detected browser.
+  function writeInstallSteps() {
+    var host = byId("install-steps");
+    if (!host) return;
+    var browser = detectBrowser();
+    host.dataset.browser = browser; // expose for styling / QA
+    var ol = document.createElement("ol");
+    installSteps(browser).forEach(function (parts) {
+      var li = document.createElement("li");
+      parts.forEach(function (p) {
+        li.appendChild(typeof p === "string" ? document.createTextNode(p) : p);
+      });
+      ol.appendChild(li);
+    });
+    host.textContent = "";
+    host.appendChild(ol);
+  }
+
   function init() {
+    writeInstallSteps();
     resolveCode()
       .then(function (r) { applyCode(r.code, r.wasEmbedded); })
       .catch(function (err) {
