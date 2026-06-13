@@ -43,6 +43,7 @@ the code is deliberately small and dependency-free.
 | `demo/standalone.html` | A single self-contained file (widget + terms inlined) that runs by **double-click**, no server — generated, for sharing a quick preview |
 | `demo/build-standalone.js` | Regenerates `demo/standalone.html` from `glossary.js` + `terms.json` + `demo/index.html` (`node demo/build-standalone.js`) |
 | `endpoint/` | Optional Cloudflare Worker that turns feedback submissions into reviewed GitHub issues (verifies Turnstile) — see [`endpoint/README.md`](./endpoint/README.md) |
+| `bookmarklet/` | Reader-side onboarding tool: a one-click bookmarklet that annotates any page, with a `build.js` that inlines `terms.json` — see below |
 
 ## Try the demo
 
@@ -73,6 +74,25 @@ See **[`EMBED.md`](./EMBED.md)** for full instructions. The short version
 ```html
 <script src="/glossary/glossary.js" data-terms="/glossary/terms.json" defer></script>
 ```
+
+## Bookmarklet (reader-side)
+
+`bookmarklet/` holds a reader-side version: a one-click `javascript:` bookmarklet
+that injects the widget into *any* page (no site-owner snippet needed). It reads
+its terms from the canonical [`terms.json`](./terms.json), inlined at build time.
+
+Build it (and regenerate after changing the widget or terms) with:
+
+```sh
+node bookmarklet/build.js
+```
+
+This writes three generated files into `bookmarklet/` (all git-ignored):
+
+- `bookmarklet.txt` — the raw `javascript:` URL.
+- `install.html` — open in a browser, then drag the button to your bookmarks bar.
+- `widget-styles.css` — the canonical term + tooltip CSS the widget injects, so a
+  host page can `<link>` the exact styles the widget uses.
 
 ## Build plan (small PRs, one thing each)
 
