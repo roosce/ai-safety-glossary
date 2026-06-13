@@ -75,12 +75,28 @@
     <!-- 3 · INSTALL + FALLBACK (filled by: onboarding-install-fallback) -->
     <section class="block" aria-labelledby="install-h">
       <h2 id="install-h">Install it (once)</h2>
-      <div id="install-steps"></div>
-      <a id="install-btn" href="#"></a>
-      <div class="fallback">
-        <button id="copy-code-btn" type="button" hidden></button>
-        <textarea id="bookmarklet-code" readonly hidden></textarea>
-      </div>
+      <ol id="install-steps" class="steps">
+        <li>Show your bookmarks bar if it's hidden — <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>
+          (Windows) or <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> (Mac).</li>
+        <li><strong>Drag the button below</strong> up onto your bookmarks bar.</li>
+        <li>That's it — open any article and click the bookmark to read it with definitions.</li>
+      </ol>
+
+      <!-- E3 wires the real bookmarklet javascript: URL into href on load. -->
+      <a id="install-btn" class="install-btn" href="#" draggable="true"
+         title="Drag me to your bookmarks bar">📘 AI Safety Glossary</a>
+
+      <details class="fallback">
+        <summary>Can't drag it? Add it by hand instead.</summary>
+        <p class="note">
+          Copy the code below, then right-click your bookmarks bar →
+          <em>Add page…</em>, name it “AI Safety Glossary”, and paste the code as the URL.
+        </p>
+        <!-- E3 fills the textarea value (from the generated bookmarklet) and wires copy. -->
+        <textarea id="bookmarklet-code" class="code-box" readonly rows="4"
+          placeholder="Bookmarklet code appears here…"></textarea>
+        <button id="copy-code-btn" class="copy-btn" type="button">Copy code</button>
+      </details>
     </section>
 
     <!-- 4 · TRY IT NOW (filled by: onboarding-tryit) -->

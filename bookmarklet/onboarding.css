@@ -109,6 +109,80 @@ body {
   color: #445;
 }
 
+/* ---- Install steps + button ---- */
+.steps {
+  margin: 0 0 24px;
+  padding-left: 22px;
+}
+
+.steps li { margin: 8px 0; }
+
+kbd {
+  font: 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  padding: 2px 6px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+}
+
+/* The draggable install button — the one thing the user drags to install. */
+.install-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
+  cursor: grab;
+  user-select: none;
+}
+
+.install-btn:active { cursor: grabbing; }
+
+/* ---- Copy-paste fallback ---- */
+.fallback {
+  margin-top: 24px;
+  font-size: 15px;
+}
+
+.fallback > summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.fallback .note { color: var(--muted); }
+
+.code-box {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px 12px;
+  font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: #2a2f3a;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  resize: vertical;
+  overflow-wrap: anywhere;
+}
+
+.copy-btn {
+  padding: 8px 16px;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.copy-btn:hover { filter: brightness(1.05); }
+
 /* ---- Per-page note ---- */
 .page-note {
   margin-top: 48px;
