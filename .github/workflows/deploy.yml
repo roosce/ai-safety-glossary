@@ -22,10 +22,14 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Don't persist the token in .git/config — the whole repo root is
+          # uploaded as the Pages artifact below.
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Build bookmarklet artifacts (install.html, bookmarklet.txt, widget-styles.css)
+      - name: Build bookmarklet artifacts from source
         run: node bookmarklet/build.js
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
