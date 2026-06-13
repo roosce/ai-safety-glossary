@@ -264,6 +264,8 @@
     flash(found
       ? "AI Safety Glossary on \u2014 " + found + " term" + (found === 1 ? "" : "s") + " highlighted. Hover to read."
       : "AI Safety Glossary on \u2014 no known terms found on this page.");
+    // Signal that annotation is done so host pages (e.g. the onboarding demo) can react.
+    document.dispatchEvent(new CustomEvent("ais-glossary-ready", { detail: { count: found } }));
   }
 
   if (document.readyState === "loading") {
