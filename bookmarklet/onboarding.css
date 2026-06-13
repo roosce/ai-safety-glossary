@@ -72,7 +72,7 @@ body {
   font-weight: 600;
   letter-spacing: .04em;
   text-transform: uppercase;
-  color: #99a;
+  color: #556; /* ~8.5:1 on white — WCAG AA/AAA (was #99a, ~2.6:1) */
 }
 
 /* The trust line — the reassurance that lowers install friction. */
