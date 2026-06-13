@@ -13,7 +13,8 @@ const path = require("path");
 
 const dir = __dirname;
 const core = fs.readFileSync(path.join(dir, "glossary-core.js"), "utf8");
-const termsRaw = fs.readFileSync(path.join(dir, "terms.json"), "utf8");
+// Read the repo's canonical term list (single source of truth) — never a fork.
+const termsRaw = fs.readFileSync(path.join(dir, "..", "terms.json"), "utf8");
 const terms = JSON.parse(termsRaw); // validate + minify (drops whitespace)
 
 // Light minify: strip block comments and collapse leading indentation. Kept
