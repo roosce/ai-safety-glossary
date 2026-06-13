@@ -100,11 +100,35 @@
       </details>
     </section>
 
-    <!-- 4 · TRY IT NOW (filled by: onboarding-tryit) -->
+    <!-- 4 · TRY IT NOW
+         Unlike the #demo above, the terms here are plain text: click your newly
+         installed bookmark to annotate them live. E3 wires #tryit-status to the
+         "ais-glossary-ready" event to show the success state. -->
     <section class="block" aria-labelledby="tryit-h">
       <h2 id="tryit-h">Try it now</h2>
-      <div id="tryit"></div>
+      <p class="tryit-intro">
+        You've installed it — give it a spin. Click your new
+        <strong>AI Safety Glossary</strong> bookmark and the terms in the sample
+        article below will light up. Hover one to read its definition.
+      </p>
+      <!-- E3 fills/toggles this once the widget reports it has run. -->
       <p id="tryit-status" role="status" aria-live="polite"></p>
+      <article id="tryit" class="tryit-article">
+        <h3>Why labs test their models before release</h3>
+        <p>
+          Before releasing a new model, a lab puts it through careful evaluation.
+          Red-teaming probes for ways the system could be turned to misuse, and
+          interpretability research tries to explain why the model behaves as it
+          does. Training with RLHF nudges it toward helpful answers, yet a model can
+          still learn reward hacking — scoring well on a test without actually doing
+          the intended task.
+        </p>
+        <p>
+          Work like this matters more as systems edge closer to AGI. Testing for
+          robustness and alignment is one of the few ways we have to catch problems
+          early, long before a model reaches millions of people.
+        </p>
+      </article>
     </section>
 
     <!-- 5 · PER-PAGE NOTE -->
