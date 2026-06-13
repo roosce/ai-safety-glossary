@@ -14,8 +14,9 @@
  *   #tryit-status     success indicator, lit by the ais-glossary-ready event
  *
  * This is the scaffold: it loads the built bookmarklet and points #install-btn
- * at it. Later behaviors (browser detection, demo tooltip, copy, try-it
- * success) hang off init().
+ * at it. The later behaviors (browser detection, demo tooltip, copy, try-it
+ * success) live in this same file and are invoked from init() — there is no
+ * cross-file hook, so init() stays private to the IIFE.
  */
 (function () {
   "use strict";
@@ -25,8 +26,21 @@
   // if that placeholder is empty we fall back to fetching the built artifact.
   var BOOKMARKLET_FILE = "bookmarklet.txt";
 
+  // This script's own URL, captured eagerly — currentScript is only valid during
+  // synchronous execution (now). The fallback fetch resolves the built artifact
+  // relative to this file, so it works wherever onboarding.html is served from.
+  var SELF_URL = (document.currentScript && document.currentScript.src) || "";
+
   function byId(id) {
     return document.getElementById(id);
+  }
+
+  function bookmarkletUrl() {
+    try {
+      return SELF_URL ? new URL(BOOKMARKLET_FILE, SELF_URL).href : BOOKMARKLET_FILE;
+    } catch (e) {
+      return BOOKMARKLET_FILE;
+    }
   }
 
   // Read the bookmarklet the page already embedded, if any.
@@ -41,7 +55,7 @@
   // a build step having injected it). Resolves to "" on any failure.
   function fetchCode() {
     if (typeof fetch !== "function") return Promise.resolve("");
-    return fetch(BOOKMARKLET_FILE, { cache: "no-store" })
+    return fetch(bookmarkletUrl(), { cache: "no-store" })
       .then(function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.text();
@@ -57,24 +71,32 @@
   }
 
   // Resolve the bookmarklet code from the page, else from the built file.
+  // Carries wasEmbedded so applyCode needn't re-query the DOM to decide whether
+  // it still owns #bookmarklet-code's contents.
   function resolveCode() {
     var embedded = embeddedCode();
-    return embedded ? Promise.resolve(embedded) : fetchCode();
+    return embedded
+      ? Promise.resolve({ code: embedded, wasEmbedded: true })
+      : fetchCode().then(function (code) { return { code: code, wasEmbedded: false }; });
   }
 
   // Point the drag-to-install button at the built javascript: URL, and make
   // sure #bookmarklet-code holds it too (so the later copy behavior has a
   // single, consistent source).
-  function applyCode(code) {
+  function applyCode(code, wasEmbedded) {
     if (!code) return;
     var btn = byId("install-btn");
     if (btn) btn.setAttribute("href", code);
     var codeEl = byId("bookmarklet-code");
-    if (codeEl && !embeddedCode()) codeEl.textContent = code;
+    if (codeEl && !wasEmbedded) codeEl.textContent = code;
   }
 
   function init() {
-    resolveCode().then(applyCode);
+    resolveCode()
+      .then(function (r) { applyCode(r.code, r.wasEmbedded); })
+      .catch(function (err) {
+        if (window.console) console.warn("[onboarding] init failed:", err);
+      });
   }
 
   if (document.readyState === "loading") {
