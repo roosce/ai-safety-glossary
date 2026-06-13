@@ -251,7 +251,7 @@ kbd {
 
 .tryit-article p {
   margin: 0 0 14px;
-  font: 17px/1.7 Georgia, "Times New Roman", serif;
+  font: 18px/1.7 Georgia, "Times New Roman", serif; /* match .demo-text reading card */
   color: #2a2f3a;
 }
 
