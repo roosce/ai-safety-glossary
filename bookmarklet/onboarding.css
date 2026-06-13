@@ -166,6 +166,26 @@ kbd {
   outline-offset: 3px;
 }
 
+/* ---- Drag animation (self-contained CSS/SVG, no JS) ---- */
+.drag-demo {
+  margin: 20px 0 0;
+  max-width: 320px;
+}
+
+.drag-demo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.drag-demo figcaption {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
 /* ---- Copy-paste fallback ---- */
 .fallback {
   margin-top: 24px;
