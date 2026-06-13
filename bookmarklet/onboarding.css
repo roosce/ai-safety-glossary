@@ -75,6 +75,28 @@ body {
   color: #556; /* ~8.5:1 on white — WCAG AA/AAA (was #99a, ~2.6:1) */
 }
 
+/* ---- Live demo ---- */
+.demo-intro {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
+/* A reading card so the demo reads like a real article, letting the
+   widget's term treatment (from widget-styles.css) stand out against prose. */
+#demo {
+  padding: 24px 28px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+}
+
+.demo-text {
+  margin: 0;
+  font: 18px/1.7 Georgia, "Times New Roman", serif;
+  color: #2a2f3a;
+}
+
 /* The trust line — the reassurance that lowers install friction. */
 .trust {
   margin: 16px 0 0;
