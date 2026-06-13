@@ -181,10 +181,118 @@
     host.appendChild(ol);
   }
 
+  // --- behavior-copy-clipboard: copy the bookmarklet to the clipboard --------
+
+  var COPY_IDLE = "Copy code";
+  var COPY_DONE = "Copied ✓";
+  var COPY_FAIL = "Press ⌘/Ctrl+C to copy";
+  var copyResetTimer = null;
+  var copyStatus = null; // visually-hidden live region for screen-reader feedback
+
+  function isBookmarkletCode(text) {
+    return /^javascript:/i.test((text || "").trim());
+  }
+
+  // The text the Copy button offers, read live from #bookmarklet-code so it
+  // reflects whatever the build embedded or applyCode() injected. That element
+  // is a <textarea>, so .value is the source of truth (textContent as fallback);
+  // we only return it if it's actually a bookmarklet, matching resolveCode().
+  function codeToCopy() {
+    var el = byId("bookmarklet-code");
+    if (!el) return "";
+    var raw = typeof el.value === "string" ? el.value : (el.textContent || "");
+    var code = raw.trim();
+    return isBookmarkletCode(code) ? code : "";
+  }
+
+  // Copy via a throwaway textarea + execCommand — the fallback for http/older
+  // browsers where the async Clipboard API is unavailable or blocked.
+  function legacyCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok ? Promise.resolve() : Promise.reject(new Error("execCommand copy failed"));
+  }
+
+  // Write to the clipboard. Prefer the async Clipboard API (needs a user
+  // gesture + secure context), else fall back. Rejects if both fail.
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(function () {
+        return legacyCopy(text);
+      });
+    }
+    return legacyCopy(text);
+  }
+
+  // Flash a transient label on the button, mirror it into the live region so
+  // screen-reader users hear the result, then restore the idle label.
+  function flash(btn, label) {
+    btn.textContent = label;
+    if (copyStatus) copyStatus.textContent = label;
+    if (copyResetTimer) clearTimeout(copyResetTimer);
+    copyResetTimer = setTimeout(function () {
+      btn.textContent = COPY_IDLE;
+      if (copyStatus) copyStatus.textContent = "";
+      copyResetTimer = null;
+    }, 2000);
+  }
+
+  // Wire the Copy button. The skeleton ships it hidden; we only surface it once
+  // there's code to copy, so it degrades to absent when the build hasn't
+  // injected the bookmarklet yet (issue #9). Returns a refresh() the caller can
+  // re-run after applyCode() resolves the code asynchronously.
+  function initCopyButton() {
+    var btn = byId("copy-code-btn");
+    if (!btn) return function () {};
+    if (!(btn.textContent || "").trim()) btn.textContent = COPY_IDLE;
+
+    // Visually-hidden status node (reuses the page's .sr-only utility) so copy
+    // feedback is announced to assistive tech, not just shown in the button.
+    if (!copyStatus) {
+      copyStatus = document.createElement("span");
+      copyStatus.className = "sr-only";
+      copyStatus.setAttribute("role", "status");
+      copyStatus.setAttribute("aria-live", "polite");
+      (btn.parentNode || document.body).appendChild(copyStatus);
+    }
+
+    function refresh() {
+      var hasCode = !!codeToCopy();
+      btn.hidden = !hasCode;
+      btn.disabled = !hasCode;
+    }
+    refresh();
+
+    btn.addEventListener("click", function () {
+      var code = codeToCopy();
+      if (!code) return;
+      copyText(code)
+        .then(function () { flash(btn, COPY_DONE); })
+        .catch(function (err) {
+          if (window.console) console.warn("[onboarding] copy failed:", err);
+          flash(btn, COPY_FAIL);
+        });
+    });
+
+    return refresh;
+  }
+
   function init() {
     writeInstallSteps();
+    var refreshCopy = initCopyButton();
     resolveCode()
-      .then(function (r) { applyCode(r.code, r.wasEmbedded); })
+      .then(function (r) {
+        applyCode(r.code, r.wasEmbedded);
+        refreshCopy(); // code may have just been injected into #bookmarklet-code
+      })
       .catch(function (err) {
         if (window.console) console.warn("[onboarding] init failed:", err);
       });
