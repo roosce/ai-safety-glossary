@@ -109,3 +109,91 @@ Run each step on the latest desktop release. Mark ✅ pass / ❌ fail (+ issue I
 2. Serve/open the onboarding page in each desktop browser.
 3. Walk steps 1–7 above; record ✅/❌ and attach repro for each ❌.
 4. File issues for failures; re-test after fixes; flip sign-off from BLOCKED once all green.
+
+---
+
+# Parked live-site QA plan — run when E1's two PRs deploy
+
+E1 has two release-blockers in flight: (1) the tooltip-on-hover bug, (2) Design A
+styling reaching the bookmarklet. This section is **pre-built and parked** so the
+live pass runs in minutes once both land and are deployed. Trigger: explicit
+"go" signal from the lead after deploy.
+
+**Pre-flight note (honesty):** this plan was authored in a CI container with **no
+browser** and a network policy that **blocks outbound page fetches** (search is
+allowed; direct `curl`/fetch of these URLs returns proxy 403s). So the URLs below
+are curated from BlueDot's published curriculum + canonical AI-safety readings and
+have **not been liveness-checked from here** — confirm each resolves at run time and
+swap in a fallback if a path 404s. No pass/fail has been pre-filled.
+
+## Test-page list (HTML articles only — PDFs are out of scope, not a bug)
+
+Curated to maximise glossary-term density (so highlighting actually fires) and to
+span the categories below. "CSP" = injection-risk to verify live (see flag below).
+
+| # | URL | Category | Why it's a good test | CSP risk |
+|---|---|---|---|---|
+| ★ | https://ifp.org/preparing-for-launch/?utm_source=bluedot-impact | IFP essay (lead-specified primary) | "Preparing for Launch" (Fist/Burga/Hwang) — confirmed BlueDot reading (utm). **Sparse-match test:** AI-policy/progress framing → fewer glossary hits than alignment papers; verify the few matches (e.g. *frontier*, *AGI*, *compute*) highlight and that the "no/low terms found" path is graceful. **Has a PDF sibling** (`/wp-content/…/Preparing-for-Launch-…pdf`) — test the **HTML** page, not the PDF. WordPress → low CSP. | low |
+| 1 | https://arxiv.org/abs/1606.06565 | arXiv abstract | "Concrete Problems in AI Safety" — reward hacking, distributional shift, safe exploration, scalable oversight | low |
+| 2 | https://arxiv.org/abs/2307.15217 | arXiv abstract | Casper et al. "Open Problems & Limitations of RLHF" — RLHF, reward model, red-teaming | low |
+| 3 | https://arxiv.org/abs/1906.01820 | arXiv abstract | "Risks from Learned Optimization" — mesa-optimisation, inner/deceptive alignment | low |
+| 4 | https://www.anthropic.com/news/core-views-on-ai-safety | Lab blog | dense alignment/RSP/evals jargon; long-form | verify |
+| 5 | https://openai.com/index/our-approach-to-alignment-research/ | Lab blog | scalable oversight, RLHF; strict-CSP candidate | verify |
+| 6 | https://deepmind.google/discover/blog/specification-gaming-the-flip-side-of-ai-ingenuity/ | Lab blog | specification gaming, reward; Google-CSP candidate | verify |
+| 7 | https://www.lesswrong.com/posts/uRbCRmMXCFvrvSrmW/starting-thoughts-on-rlhf | LessWrong | community long-form; **has a dark-mode toggle** → use for the dark-theme check | verify |
+| 8 | https://forum.effectivealtruism.org/posts/YepzavQDRvobANHYK/how-educational-courses-help-build-fields-lessons-from-ai | EA Forum | ForumMagnum render; many inline links near terms | verify |
+| 9 | https://blog.bluedot.org/p/rlhf-limitations-for-ai-safety | Substack | exact BlueDot reading; Substack sets a CSP → injection check | verify |
+
+Fallbacks if a path 404s: any other arXiv `/abs/` AI-safety paper (1–3), any other
+Anthropic/OpenAI/DeepMind safety post (4–6), any Alignment Forum post (7).
+**Dark-theme coverage:** page 7 in dark mode; also flip OS dark mode on page 1 to
+confirm the tooltip (`#1f2430` bg / white text) and teal tint stay legible on a
+dark background.
+
+## Per-page checklist (record ✅/❌ + note per page, per browser)
+
+For each test page above, on each of Chrome / Edge / Firefox / Safari:
+
+- [ ] **Terms highlight** — known terms get annotated (every mention; `OCCURRENCES="all"`).
+- [ ] **Hover tooltip** — hovering a term shows the definition tooltip (the E1 hover-bug fix).
+- [ ] **Source link** — tooltip shows the source name/link and it opens (`target=_blank`, `rel=noopener`).
+- [ ] **Design A renders** — teal highlight tint **+ trailing ⓘ glyph**, *not* the old dotted underline.
+- [ ] **Keyboard** — Tab reaches a term (focusable), Enter/focus opens the tip, **Esc dismisses** it; focus not trapped.
+- [ ] **Dark-themed page** — on a dark page the tint, glyph, and tooltip stay legible (contrast OK).
+- [ ] **No console errors** — DevTools console clean after click + a few hovers (note any warning).
+
+Plus the density check this role owns (QA-6): on a long page (1–3), confirm
+every-mention + glyph doesn't read as **speckled**; if it hurts readability, propose
+glyph-on-first-mention-only.
+
+## Known limits — do NOT file these as bugs
+- **Desktop browsers only.** Mobile/touch is out of scope; don't test or file it.
+- **PDFs unsupported.** arXiv `/pdf/` links, downloaded papers, in-browser PDF viewers —
+  expected non-coverage, not a bug. Use `/abs/` HTML pages only.
+- **CSP-blocked sites.** Some sites' Content-Security-Policy can block the injected
+  styling/script. **Note which sites** (page #) it happens on; do **not** treat as a
+  fix or a bug to file — it's an environmental limit of bookmarklets.
+
+## ⚠ Early signal flagged now (pre-fix, static — no live run possible here)
+The most probable source of "behaves oddly" on the lab-blog/Substack pages is a
+**CSP × injected-`<style>` interaction**, not the widget logic:
+
+- The bookmarklet is fully self-contained (terms baked into `window.__GLOSSARY_TERMS`,
+  no `fetch`/`connect`), and user-invoked `javascript:` bookmarklets are exempt from
+  page `script-src` in Chrome/Firefox — so the **annotation logic should run** even on
+  strict-CSP sites.
+- **But** the visual depends on `injectStyles()` appending a `<style>` element
+  (`glossary-core.js:39-43`). A page with strict `style-src` lacking `'unsafe-inline'`
+  can **silently drop that stylesheet** — terms still get wrapped in `.glossary-term`
+  spans, but **Design A's tint + ⓘ glyph won't render** and the tooltip loses its chrome.
+- **Watch pages 5/6/9 (OpenAI / DeepMind / Substack)** for exactly this: spans present
+  in the DOM but no visible tint/glyph. If seen, record it under "CSP-blocked sites"
+  (a known limit), **not** as a Design-A regression. This is the early heads-up the
+  lead asked for; it can only be confirmed on a real browser during the live pass.
+
+## Run procedure
+1. Confirm E1's two PRs are **merged + deployed**; hard-refresh the install page; re-grab the bookmarklet.
+2. For each test page × each browser: click the bookmark, then walk the 7-item checklist; capture a screenshot per ❌.
+3. Record results in the matrix above (replace ⏳); attach repro steps for failures.
+4. File issues for genuine failures only (apply the "do NOT file" list); re-test after fixes.
+5. Flip the sign-off from **BLOCKED** to **PASS/FAIL per browser** once the funnel + all pages are walked.
