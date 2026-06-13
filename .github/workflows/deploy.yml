@@ -16,6 +16,8 @@ concurrency:
 
 jobs:
   build-and-deploy:
+    # Only ever publish main — guards manual workflow_dispatch runs on other refs.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
