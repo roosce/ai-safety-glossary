@@ -26,6 +26,11 @@
   // if that placeholder is empty we fall back to fetching the built artifact.
   var BOOKMARKLET_FILE = "bookmarklet.txt";
 
+  // The glossary term data — the same terms.json the build inlines into the
+  // bookmarklet. The demo fetches it for real definitions; it's served from the
+  // repo root, one level up from this script.
+  var TERMS_FILE = "../terms.json";
+
   // This script's own URL, captured eagerly — currentScript is only valid during
   // synchronous execution (now). The fallback fetch resolves the built artifact
   // relative to this file, so it works wherever onboarding.html is served from.
@@ -40,6 +45,14 @@
       return SELF_URL ? new URL(BOOKMARKLET_FILE, SELF_URL).href : BOOKMARKLET_FILE;
     } catch (e) {
       return BOOKMARKLET_FILE;
+    }
+  }
+
+  function termsUrl() {
+    try {
+      return SELF_URL ? new URL(TERMS_FILE, SELF_URL).href : TERMS_FILE;
+    } catch (e) {
+      return TERMS_FILE;
     }
   }
 
@@ -285,8 +298,163 @@
     return refresh;
   }
 
+  // --- behavior-demo-tooltip: hover/focus/tap definitions for #demo terms -----
+  //
+  // The #demo paragraph ships pre-marked .glossary-term spans (styled by
+  // widget-styles.css). This reproduces the real widget's tooltip on them —
+  // fetching the canonical terms.json for definitions and reusing the widget's
+  // .glossary-tip / .glossary-src classes so the demo looks identical — without
+  // running the bookmarklet itself (its IIFE would annotate the whole page and
+  // toast). Degrades to plain highlighted terms if terms.json can't be loaded.
+
+  // Fetch and parse the term list. Resolves to [] on any failure.
+  function fetchTerms() {
+    if (typeof fetch !== "function") return Promise.resolve([]);
+    return fetch(termsUrl(), { cache: "no-store" })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) { return (data && data.terms) || []; })
+      .catch(function (err) {
+        if (window.console) console.warn("[onboarding] could not load terms:", err);
+        return [];
+      });
+  }
+
+  // Map every term and alias (lower-cased) to its entry.
+  function indexTerms(terms) {
+    var map = {};
+    terms.forEach(function (entry) {
+      if (!entry || !entry.term || !entry.definition) return;
+      [entry.term].concat(entry.aliases || []).forEach(function (name) {
+        if (name) map[String(name).toLowerCase()] = entry;
+      });
+    });
+    return map;
+  }
+
+  function safeExternalUrl(raw) {
+    if (!raw) return "";
+    try {
+      var u = new URL(String(raw), window.location.href);
+      return (u.protocol === "http:" || u.protocol === "https:") ? u.href : "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  // Attach the definition/source to a demo span so the tooltip can read it,
+  // mirroring the data the widget's makeTermSpan() sets (incl. aria-label).
+  function annotateDemoTerm(span, entry) {
+    var label = entry.term + ": " + entry.definition;
+    span.dataset.definition = entry.definition;
+    if (entry.source) {
+      span.dataset.sourceName = entry.source.name || entry.source.url || "";
+      span.dataset.sourceUrl = entry.source.url || "";
+      if (span.dataset.sourceName) label += " (Source: " + span.dataset.sourceName + ")";
+    }
+    span.setAttribute("aria-label", label);
+    if (!span.hasAttribute("tabindex")) span.tabIndex = 0;
+  }
+
+  var demoTip = null, demoHideTimer = null;
+
+  function cancelDemoHide() { if (demoHideTimer) { clearTimeout(demoHideTimer); demoHideTimer = null; } }
+  function scheduleDemoHide() { cancelDemoHide(); demoHideTimer = setTimeout(hideDemoTip, 250); }
+  function hideDemoTip() { cancelDemoHide(); if (demoTip) demoTip.hidden = true; }
+
+  function ensureDemoTip() {
+    if (demoTip) return;
+    demoTip = document.createElement("span");
+    demoTip.className = "glossary-tip";
+    demoTip.setAttribute("role", "tooltip");
+    demoTip.hidden = true;
+    demoTip.addEventListener("mouseenter", cancelDemoHide);
+    demoTip.addEventListener("mouseleave", scheduleDemoHide);
+    document.body.appendChild(demoTip);
+  }
+
+  // Place the fixed-position tip below the term, flipping above / clamping to the
+  // viewport when it would overflow — matching the widget's placement.
+  function positionDemoTip(el) {
+    var r = el.getBoundingClientRect();
+    var gap = 6, margin = 8;
+    var w = demoTip.offsetWidth, h = demoTip.offsetHeight;
+    var vw = document.documentElement.clientWidth, vh = window.innerHeight;
+    var flipUp = (r.bottom + gap + h > vh) && (r.top - gap - h >= 0);
+    var top = flipUp ? (r.top - gap - h) : (r.bottom + gap);
+    top = Math.max(margin, Math.min(top, vh - h - margin));
+    var left = Math.max(margin, Math.min(r.left, vw - w - margin));
+    demoTip.style.top = top + "px";
+    demoTip.style.left = left + "px";
+  }
+
+  function showDemoTip(el) {
+    if (!el.dataset.definition) return;
+    ensureDemoTip();
+    cancelDemoHide();
+    while (demoTip.firstChild) demoTip.removeChild(demoTip.firstChild);
+    demoTip.appendChild(document.createTextNode(el.dataset.definition));
+    if (el.dataset.sourceUrl || el.dataset.sourceName) {
+      var src = document.createElement("span");
+      src.className = "glossary-src";
+      src.appendChild(document.createTextNode("Source: "));
+      var safe = safeExternalUrl(el.dataset.sourceUrl);
+      if (safe) {
+        var a = document.createElement("a");
+        a.href = safe;
+        a.textContent = el.dataset.sourceName || safe;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        src.appendChild(a);
+      } else {
+        src.appendChild(document.createTextNode(el.dataset.sourceName || ""));
+      }
+      demoTip.appendChild(src);
+    }
+    demoTip.hidden = false;
+    positionDemoTip(el);
+  }
+
+  // Wire definitions + tooltip interactions onto the #demo terms.
+  function wireDemoTooltips() {
+    var demo = byId("demo");
+    if (!demo) return;
+    var spans = demo.querySelectorAll(".glossary-term");
+    if (!spans.length) return;
+
+    fetchTerms().then(function (terms) {
+      var map = indexTerms(terms);
+      var wired = 0;
+      Array.prototype.forEach.call(spans, function (span) {
+        var entry = map[(span.textContent || "").replace(/\s+/g, " ").trim().toLowerCase()];
+        if (entry) { annotateDemoTerm(span, entry); wired++; }
+      });
+      if (!wired) return; // nothing matched; leave terms as plain highlights
+
+      var hit = function (e) { return e.target.closest && e.target.closest(".glossary-term"); };
+      demo.addEventListener("mouseover", function (e) { var el = hit(e); if (el) showDemoTip(el); });
+      demo.addEventListener("mouseout", function (e) { if (hit(e)) scheduleDemoHide(); });
+      demo.addEventListener("focusin", function (e) { var el = hit(e); if (el) showDemoTip(el); });
+      demo.addEventListener("focusout", function (e) {
+        if (e.relatedTarget && demoTip && demoTip.contains(e.relatedTarget)) return;
+        scheduleDemoHide();
+      });
+      demo.addEventListener("click", function (e) { var el = hit(e); if (el) showDemoTip(el); }); // tap
+      document.addEventListener("click", function (e) {
+        var t = e.target;
+        var inside = t.closest && (t.closest(".glossary-term") || t.closest(".glossary-tip"));
+        if (demoTip && !demoTip.hidden && !inside) hideDemoTip();
+      });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideDemoTip(); });
+      window.addEventListener("scroll", hideDemoTip, { passive: true });
+    });
+  }
+
   function init() {
     writeInstallSteps();
+    wireDemoTooltips();
     var refreshCopy = initCopyButton();
     resolveCode()
       .then(function (r) {
