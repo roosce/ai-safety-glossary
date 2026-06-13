@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary term styles — pick one</title>
+<style>
+  :root{ --accent:#2f9e8f; --amber:#e8a317; }
+  body{font:17px/1.7 Georgia,"Times New Roman",serif;color:#222;max-width:680px;margin:0 auto;padding:32px 24px 80px;background:#fff}
+  h1{font:600 24px/1.3 system-ui,sans-serif;margin:0 0 4px}
+  .lede{font:15px/1.5 system-ui,sans-serif;color:#667;margin:0 0 28px}
+  .card{border:1px solid #e4e6ea;border-radius:12px;padding:18px 22px;margin:18px 0;background:#fff}
+  .card h2{font:600 15px/1.3 system-ui,sans-serif;margin:0 0 2px}
+  .card .desc{font:13px/1.4 system-ui,sans-serif;color:#778;margin:0 0 12px}
+  .rec{outline:2px solid var(--accent);outline-offset:2px}
+  .rec h2::after{content:" · recommended";color:var(--accent);font-weight:600}
+  a{color:#1a5fb4}                     /* a normal article hyperlink */
+  .dark{background:#15171c;color:#d6d9df;border-color:#2a2d35}
+  .dark a{color:#7fb0f0}
+  .section-label{font:600 13px/1 system-ui,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#99a;margin:36px 0 8px}
+
+  /* ---- candidate styles (all keep the ⓘ info glyph) ---- */
+  /* shared glyph: a small accent ⓘ after the term, signalling "definition on hover" */
+  .g-a::after,.g-b::after,.g-c::after{content:"\00a0\24D8";font-size:.72em;vertical-align:.15em;color:var(--accent);opacity:.85}
+
+  /* A: glyph + highlight tint (teal) */
+  .g-a{background:rgba(47,158,143,.16);border-radius:3px;padding:0 .12em;cursor:help;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  /* B: glyph only — plain term text, no fill */
+  .g-b{cursor:help}
+  /* C: glyph + accent-coloured term text (no fill) */
+  .g-c{color:var(--accent);cursor:help}
+
+  /* tooltip — same look as the live widget */
+  .glossary-tip{position:fixed;z-index:2147483647;max-width:280px;max-height:calc(100vh - 16px);overflow:auto;
+    padding:8px 10px;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#fff;
+    background:#1f2430;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+  .glossary-tip[hidden]{display:none}
+  .glossary-tip a{color:#9ec1ff}
+  .glossary-tip .glossary-src{display:block;margin-top:6px;font-size:12px;opacity:.85}
+</style>
+</head>
+<body>
+  <h1>With the ⓘ glyph: highlight the term, or not?</h1>
+  <p class="lede">All three keep the <strong>ⓘ info glyph</strong>. The question is whether highlighting the term
+    <em>as well</em> helps you find it, or just adds noise. <a href="#">Underlined blue words are real hyperlinks</a>;
+    hover any glyph term to see the live tooltip.</p>
+
+  <div class="section-label">On a light page</div>
+
+  <div class="card rec">
+    <h2>A — Glyph + highlight tint</h2>
+    <p class="desc">Tint makes terms easy to spot when scanning; glyph confirms “hover for a definition”. Busiest of the three.</p>
+    <p>Proposals from the <span class="g-a">AI safety</span> community <a href="#">often</a> <a href="#">attract</a>
+      <a href="#">criticism</a> for relying on brittle, top-down control. Despite the validity of these critiques,
+      <span class="g-a">AI alignment</span> research aimed at solving problems from a <span class="g-a">frontier model</span>
+      remains a niche field, with too little attention to <span class="g-a">scalable oversight</span> and
+      <span class="g-a">existential risk</span>.</p>
+  </div>
+
+  <div class="card">
+    <h2>B — Glyph only (no highlight)</h2>
+    <p class="desc">Cleanest, lightest on reading flow. The glyph is the only marker — terms are subtler to spot when scanning.</p>
+    <p>Proposals from the <span class="g-b">AI safety</span> community <a href="#">often</a> <a href="#">attract</a>
+      <a href="#">criticism</a> for relying on brittle, top-down control. Despite the validity of these critiques,
+      <span class="g-b">AI alignment</span> research aimed at solving problems from a <span class="g-b">frontier model</span>
+      remains a niche field, with too little attention to <span class="g-b">scalable oversight</span> and
+      <span class="g-b">existential risk</span>.</p>
+  </div>
+
+  <div class="card">
+    <h2>C — Glyph + accent term text (no fill)</h2>
+    <p class="desc">Middle ground: the recoloured word is findable when scanning, but there’s no background fill. Recoloured away from link-blue.</p>
+    <p>Proposals from the <span class="g-c">AI safety</span> community <a href="#">often</a> <a href="#">attract</a>
+      <a href="#">criticism</a> for relying on brittle, top-down control. Despite the validity of these critiques,
+      <span class="g-c">AI alignment</span> research aimed at solving problems from a <span class="g-c">frontier model</span>
+      remains a niche field, with too little attention to <span class="g-c">scalable oversight</span> and
+      <span class="g-c">existential risk</span>.</p>
+  </div>
+
+  <div class="section-label">On a dark page (does the treatment survive?)</div>
+
+  <div class="card dark rec">
+    <h2>A — Glyph + highlight tint</h2>
+    <p class="desc" style="color:#9aa">The translucent tint and accent glyph must still show on dark.</p>
+    <p>Proposals from the <span class="g-a">AI safety</span> community <a href="#">often</a> <a href="#">attract</a>
+      <a href="#">criticism</a>. <span class="g-a">AI alignment</span> research on a <span class="g-a">frontier model</span>
+      still neglects <span class="g-a">scalable oversight</span> and <span class="g-a">existential risk</span>.</p>
+  </div>
+
+  <div class="card dark">
+    <h2>B — Glyph only (no highlight)</h2>
+    <p>Proposals from the <span class="g-b">AI safety</span> community <a href="#">often</a> <a href="#">attract</a>
+      <a href="#">criticism</a>. <span class="g-b">AI alignment</span> research on a <span class="g-b">frontier model</span>
+      still neglects <span class="g-b">scalable oversight</span> and <span class="g-b">existential risk</span>.</p>
+  </div>
+
+  <div class="card dark">
+    <h2>C — Glyph + accent term text (no fill)</h2>
+    <p>Proposals from the <span class="g-c">AI safety</span> community <a href="#">often</a> <a href="#">attract</a>
+      <a href="#">criticism</a>. <span class="g-c">AI alignment</span> research on a <span class="g-c">frontier model</span>
+      still neglects <span class="g-c">scalable oversight</span> and <span class="g-c">existential risk</span>.</p>
+  </div>
+
+<script>
+(function(){
+  var DEFS = {
+    "ai safety": {definition:"The field focused on preventing harms from AI systems, especially large-scale or catastrophic harms from advanced AI. It spans technical work (e.g. alignment, interpretability) and governance and policy work.", source:{name:"Wikipedia: AI safety", url:"https://en.wikipedia.org/wiki/AI_safety"}},
+    "ai alignment": {definition:"The problem of making AI systems pursue the goals their designers and society actually intend, rather than goals that merely look right during training. An aligned system reliably does what we mean, not just what we literally said.", source:{name:"Wikipedia: AI alignment", url:"https://en.wikipedia.org/wiki/AI_alignment"}},
+    "frontier model": {definition:"One of the most capable, general-purpose AI models at the cutting edge of what is currently possible, such as the latest large models from leading labs. These are the main focus of safety concern.", source:{name:"Anderljung et al. (2023), Frontier AI Regulation", url:"https://arxiv.org/abs/2307.03718"}},
+    "scalable oversight": {definition:"The challenge of how humans can supervise and correct AI systems that are as capable as, or more capable than, the humans overseeing them, when we cannot easily check their work ourselves.", source:{name:"Bowman et al. (2022)", url:"https://arxiv.org/abs/2211.03540"}},
+    "existential risk": {definition:"Existential risk (x-risk): a risk that could permanently and drastically curtail humanity's potential, such as human extinction or an unrecoverable collapse. In AI, it refers to scenarios where advanced AI causes such an outcome.", source:{name:"Wikipedia: Existential risk from AI", url:"https://en.wikipedia.org/wiki/Existential_risk_from_artificial_intelligence"}}
+  };
+  var SEL = ".g-a, .g-b, .g-c";
+  var tip, hideTimer = null;
+  function cancelHide(){ if(hideTimer){clearTimeout(hideTimer); hideTimer=null;} }
+  function scheduleHide(){ cancelHide(); hideTimer=setTimeout(hideTip,250); }
+  function hideTip(){ cancelHide(); if(tip) tip.hidden=true; }
+  function ensureTip(){
+    if(tip) return;
+    tip=document.createElement("div");
+    tip.className="glossary-tip"; tip.setAttribute("role","tooltip"); tip.hidden=true;
+    tip.addEventListener("mouseenter",cancelHide);
+    tip.addEventListener("mouseleave",scheduleHide);
+    document.body.appendChild(tip);
+  }
+  function defFor(el){
+    var key=(el.textContent||"").trim().toLowerCase();
+    return DEFS[key]||null;
+  }
+  function showTip(el){
+    var info=defFor(el); if(!info) return;
+    ensureTip(); cancelHide();
+    while(tip.firstChild) tip.removeChild(tip.firstChild);
+    tip.appendChild(document.createTextNode(info.definition));
+    if(info.source){
+      var s=document.createElement("span"); s.className="glossary-src";
+      s.appendChild(document.createTextNode("Source: "));
+      var a=document.createElement("a"); a.href=info.source.url; a.textContent=info.source.name;
+      a.target="_blank"; a.rel="noopener noreferrer"; s.appendChild(a);
+      tip.appendChild(s);
+    }
+    tip.hidden=false;
+    var r=el.getBoundingClientRect(), gap=6, margin=8;
+    var tw=tip.offsetWidth, th=tip.offsetHeight;
+    var vw=document.documentElement.clientWidth, vh=window.innerHeight;
+    var flipUp=(r.bottom+gap+th>vh)&&(r.top-gap-th>=0);
+    var top=flipUp?(r.top-gap-th):(r.bottom+gap);
+    top=Math.max(margin,Math.min(top,vh-th-margin));
+    var left=Math.max(margin,Math.min(r.left,vw-tw-margin));
+    tip.style.top=top+"px"; tip.style.left=left+"px";
+  }
+  document.addEventListener("mouseover",function(e){ var el=e.target.closest&&e.target.closest(SEL); if(el) showTip(el); });
+  document.addEventListener("mouseout",function(e){ if(e.target.closest&&e.target.closest(SEL)) scheduleHide(); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") hideTip(); });
+  window.addEventListener("scroll",hideTip,{passive:true});
+})();
+</script>
+</body>
+</html>

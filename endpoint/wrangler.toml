@@ -1,0 +1,27 @@
+# Cloudflare Worker config for the glossary feedback endpoint.
+# Deploy:  wrangler deploy        (from this folder)
+# Secrets: wrangler secret put GITHUB_TOKEN
+#          wrangler secret put TURNSTILE_SECRET
+# See README.md for the full walkthrough.
+
+name = "glossary-feedback"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# Repo that submissions are filed into as issues ("owner/repo").
+GITHUB_REPO = "roosce/ai-safety-glossary"
+# CORS allow-list: "*" or a comma-separated list of site origins you embed on,
+# e.g. "https://example.com,https://blog.example.com". Prefer an explicit list
+# in production so only your sites can post.
+ALLOWED_ORIGINS = "*"
+# Optional extra labels added to every issue (comma-separated).
+# ISSUE_LABELS = ""
+
+# Optional per-IP rate limiting. Create the namespace once with
+#   wrangler kv namespace create RATE_LIMIT
+# then uncomment below and paste the printed id. Without this binding the Worker
+# simply skips rate limiting (Turnstile stays the primary gate).
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = "<paste-kv-namespace-id>"

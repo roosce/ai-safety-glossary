@@ -45,7 +45,7 @@
       <li>We pick the <strong>canonical reference the idea comes from</strong>, so you can read further and judge the definition yourself. Corrections are welcome.</li>
     </ul>
 
-    <p class="banner-try"><strong>Try it:</strong> hover (or tap on mobile) any <u>underlined</u> term below to see its definition and source.</p>
+    <p class="banner-try"><strong>Try it:</strong> hover (or tap on mobile) any <u>underlined</u> term below to see its definition and source. Each tooltip also has <strong>Flag</strong> and <strong>Suggest a term</strong> links — or use <a href="#" data-glossary-suggest>suggest a term</a> here. (Demo mode: submissions aren't sent — they're logged to the browser console.)</p>
   </div>
 
   <article id="article">
@@ -90,6 +90,7 @@
     </p>
   </article>
 
-  <script src="../glossary.js" data-terms="../terms.json" data-root="#article" defer></script>
+  <script src="../glossary.js" data-terms="../terms.json" data-root="#article"
+          data-feedback-url="demo" defer></script>
 </body>
 </html>

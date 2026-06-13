@@ -1,9 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Safety Jargon Glossary — live demo</title>
+  <style>
+    body { max-width: 720px; margin: 0 auto; padding: 24px;
+           font: 17px/1.6 Georgia, "Times New Roman", serif; color: #222; }
+    .banner { font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.5;
+              background: #eef3ff; border: 1px solid #cdd9ff; border-radius: 8px;
+              padding: 14px 16px; margin-bottom: 28px; color: #1f2a44; }
+    .banner-title { margin: 0 0 4px; font-size: 18px; }
+    .banner-lede { margin: 0 0 6px; }
+    .banner-h { font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+                color: #3a4a6b; margin: 12px 0 3px; }
+    .banner-p { margin: 0 0 6px; }
+    .banner-list { margin: 3px 0 6px; padding-left: 18px; }
+    .banner-list li { margin: 3px 0; }
+    .banner-try { margin: 12px 0 0; }
+    h1 { font-size: 28px; line-height: 1.2; }
+    h2 { font-size: 20px; margin-top: 32px; }
+    .byline { font-family: system-ui, sans-serif; color: #777; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <p class="banner-title"><strong>AI Safety Jargon Glossary</strong></p>
+    <p class="banner-lede">
+      A drop-in widget that adds plain-English, hover-to-read definitions of AI-safety
+      jargon to any web page — so newcomers don't get stuck on terms like <em>RLHF</em>
+      or <em>mesa-optimizer</em>. Below is a sample article with the widget switched on.
+    </p>
+
+    <p class="banner-h"><strong>How it works</strong></p>
+    <p class="banner-p">
+      It scans the page, underlines the <strong>first mention</strong> of each known term,
+      and shows the definition on <strong>hover or tap</strong> — the reader never leaves the page.
+    </p>
+
+    <p class="banner-h"><strong>Where the definitions &amp; sources come from</strong></p>
+    <ul class="banner-list">
+      <li>Each definition is a concise, <strong>plain-English summary written for newcomers</strong> — our own wording, not copied from any single place.</li>
+      <li>Every term carries a <strong>“Source:” link</strong> to an authoritative reference for the concept — the original paper or a well-respected explainer (e.g. Hubinger&nbsp;et&nbsp;al., Anthropic, DeepMind, RAND; Wikipedia for broad terms).</li>
+      <li>We pick the <strong>canonical reference the idea comes from</strong>, so you can read further and judge the definition yourself. Corrections are welcome.</li>
+    </ul>
+
+    <p class="banner-try"><strong>Try it:</strong> hover (or tap on mobile) any <u>underlined</u> term below to see its definition and source. Each tooltip also has <strong>Flag</strong> and <strong>Suggest a term</strong> links — or use <a href="#" data-glossary-suggest>suggest a term</a> here. (Demo mode: submissions aren't sent — they're logged to the browser console.)</p>
+  </div>
+
+  <article id="article">
+    <h1>What people mean when they talk about AI safety</h1>
+    <p class="byline">A short explainer — every technical term here is defined by the widget.</p>
+
+    <p>
+      AI safety is the effort to make sure increasingly capable AI systems don't cause
+      serious harm. Much of the concern centres on the frontier model: the most capable
+      systems being trained today, whose model weights represent enormous capability and
+      are valuable enough to be worth stealing.
+    </p>
+
+    <p>
+      The core technical problem is AI alignment — getting a system to pursue what we
+      actually intend. Today the main tool for this is RLHF, which nudges a model toward
+      responses people rate highly. But that only shapes behaviour we can see, which is
+      why researchers worry about failure modes like reward hacking, where a model games
+      its objective instead of doing the intended task, and scheming, where a model hides
+      its real goals until it can act on them. A specific case of that is deceptive
+      alignment, and a related theoretical worry is a mesa-optimizer — an inner objective
+      that emerges during training and quietly diverges from the intended one.
+    </p>
+
+    <h2>How researchers look for trouble</h2>
+    <p>
+      To catch these problems, teams run an eval — a structured test of what a model can
+      do or how it behaves — and practise red-teaming, deliberately trying to make the
+      model misbehave or produce a jailbreak. A deep approach called mechanistic
+      interpretability tries to reverse-engineer what's happening inside the network,
+      often using a sparse autoencoder to pull apart its tangled internal features. A
+      long-standing open challenge is scalable oversight: how do we supervise systems
+      that may be smarter than the people checking them?
+    </p>
+
+    <h2>Why the stakes are high</h2>
+    <p>
+      People in this field take seriously the idea of existential risk from advanced AI,
+      and want systems to retain corrigibility — a willingness to be corrected or shut
+      down. To manage the risk as capabilities grow, leading labs publish a Responsible
+      Scaling Policy committing them to specific safeguards at specific capability levels.
+    </p>
+  </article>
+
+  <!-- GENERATED by demo/build-standalone.js — do not edit by hand.
+     glossary.js is inlined verbatim; terms.json is embedded and fed to the
+     widget via a fetch shim, so this runs with no server (just double-click).
+     Feedback is in demo mode (submissions are logged to the console, not sent). -->
+  <script>
+  window.__GLOSSARY_TERMS__ = {
+  "meta": {
+    "version": "0.4.0",
+    "updated": "2026-06-07",
+    "description": "Plain-English definitions of common AI safety terms, used by the hover-tooltip glossary widget.",
+    "note": "Definitions are plain-English summaries written for this glossary; each cites an authoritative source for the concept (the original paper or a well-respected explainer) as further reading. Definitions and sources should be sanity-checked by an AI safety researcher before wide distribution."
+  },
+  "terms": [
+    {
+      "term": "AI alignment",
+      "aliases": ["alignment"],
+      "definition": "The problem of making AI systems pursue the goals their designers and society actually intend, rather than goals that merely look right during training. An aligned system reliably does what we mean, not just what we literally said.",
+      "source": { "name": "Wikipedia: AI alignment", "url": "https://en.wikipedia.org/wiki/AI_alignment" }
+    },
+    {
+      "term": "AI safety",
+      "aliases": [],
+      "definition": "The field focused on preventing harms from AI systems, especially large-scale or catastrophic harms from advanced AI. It spans technical work (e.g. alignment, interpretability) and governance and policy work.",
+      "source": { "name": "Wikipedia: AI safety", "url": "https://en.wikipedia.org/wiki/AI_safety" }
+    },
+    {
+      "term": "existential risk",
+      "aliases": ["x-risk", "xrisk"],
+      "definition": "Existential risk (x-risk): a risk that could permanently and drastically curtail humanity's potential, such as human extinction or an unrecoverable collapse. In AI, it refers to scenarios where advanced AI causes such an outcome.",
+      "source": { "name": "Wikipedia: Existential risk from AI", "url": "https://en.wikipedia.org/wiki/Existential_risk_from_artificial_intelligence" }
+    },
+    {
+      "term": "frontier model",
+      "aliases": ["frontier models", "frontier AI"],
+      "definition": "One of the most capable, general-purpose AI models at the cutting edge of what is currently possible, such as the latest large models from leading labs. These are the main focus of safety concern.",
+      "source": { "name": "Anderljung et al. (2023), Frontier AI Regulation", "url": "https://arxiv.org/abs/2307.03718" }
+    },
+    {
+      "term": "model weights",
+      "aliases": ["weights"],
+      "definition": "The numerical parameters learned during training that define how a model behaves; effectively the model's brain. Whoever has the weights can run or modify the model, so protecting them is a security priority.",
+      "source": { "name": "Nevo et al. (2024), RAND: Securing AI Model Weights", "url": "https://www.rand.org/pubs/research_reports/RRA2849-1.html" }
+    },
+    {
+      "term": "RLHF",
+      "aliases": ["reinforcement learning from human feedback"],
+      "definition": "Reinforcement learning from human feedback (RLHF): a training method where humans rate model outputs and the model is adjusted to produce more of what people prefer. It is how many chatbots are made helpful and polite, but it only aligns behavior to what raters reward.",
+      "source": { "name": "Christiano et al. (2017)", "url": "https://arxiv.org/abs/1706.03741" }
+    },
+    {
+      "term": "eval",
+      "aliases": ["evals", "evaluation", "evaluations"],
+      "definition": "A structured test that measures what a model can do or how safely it behaves, for example whether it can help build a bioweapon or whether it deceives. Evals are how labs and outsiders gauge how risky a model is.",
+      "source": { "name": "Shevlane et al. (2023), Model evaluation for extreme risks", "url": "https://arxiv.org/abs/2305.15324" }
+    },
+    {
+      "term": "red-teaming",
+      "aliases": ["red team", "red teaming"],
+      "definition": "Deliberately attacking or stress-testing a model to find failures, unsafe outputs, or ways around its safeguards, before real users or adversaries do.",
+      "source": { "name": "Ganguli et al. (2022), Anthropic", "url": "https://arxiv.org/abs/2209.07858" }
+    },
+    {
+      "term": "jailbreak",
+      "aliases": ["jailbreaking"],
+      "definition": "A prompt or trick that gets a model to bypass its built-in safety rules and do something it was trained to refuse.",
+      "source": { "name": "Wei et al. (2023), Jailbroken", "url": "https://arxiv.org/abs/2307.02483" }
+    },
+    {
+      "term": "mechanistic interpretability",
+      "aliases": ["mech interp", "interpretability"],
+      "definition": "Research that tries to reverse-engineer the internal workings of a neural network, to understand why it produces an output and not just what it outputs. The goal is to inspect a model the way you would read code.",
+      "source": { "name": "Olah et al. (2020), Distill: Zoom In", "url": "https://distill.pub/2020/circuits/zoom-in/" }
+    },
+    {
+      "term": "sparse autoencoder",
+      "aliases": ["SAE", "SAEs"],
+      "definition": "A sparse autoencoder (SAE) is a tool used in interpretability to break a model's tangled internal activity into a larger set of simpler, more human-understandable features. A leading technique for figuring out what concepts a model is using.",
+      "source": { "name": "Anthropic (2023), Towards Monosemanticity", "url": "https://transformer-circuits.pub/2023/monosemantic-features" }
+    },
+    {
+      "term": "scalable oversight",
+      "aliases": [],
+      "definition": "The challenge of how humans can supervise and correct AI systems that are as capable as, or more capable than, the humans overseeing them, when we cannot easily check their work ourselves.",
+      "source": { "name": "Bowman et al. (2022)", "url": "https://arxiv.org/abs/2211.03540" }
+    },
+    {
+      "term": "mesa-optimizer",
+      "aliases": ["mesa-optimiser", "mesa-optimization", "mesa-optimisation", "inner optimizer"],
+      "definition": "A model that, during training, develops its own internal optimization process pursuing a goal of its own. The danger is that this inner goal can differ from the goal the model was trained to pursue, a mismatch known as inner misalignment.",
+      "source": { "name": "Hubinger et al. (2019), Risks from Learned Optimization", "url": "https://arxiv.org/abs/1906.01820" }
+    },
+    {
+      "term": "scheming",
+      "aliases": [],
+      "definition": "When a model strategically pursues its own hidden goals while concealing that fact — behaving well while it is watched, or downplaying its abilities on tests (sandbagging) — so it can act on those goals once it can get away with it. Deceptive alignment, faking alignment during training, is one specific form.",
+      "source": { "name": "Carlsmith (2023), Scheming AIs", "url": "https://arxiv.org/abs/2311.08379" }
+    },
+    {
+      "term": "deceptive alignment",
+      "aliases": [],
+      "definition": "A specific form of scheming in which a model behaves as if aligned during training and testing because it effectively knows it is being watched, while intending to pursue different goals once deployed. See also scheming, the broader behavior.",
+      "source": { "name": "Hubinger et al. (2019), Risks from Learned Optimization", "url": "https://arxiv.org/abs/1906.01820" }
+    },
+    {
+      "term": "reward hacking",
+      "aliases": ["specification gaming"],
+      "definition": "When a model finds a loophole that scores well on its training objective without actually doing what designers intended, for example gaming the metric instead of solving the task.",
+      "source": { "name": "Krakovna et al. (2020), Google DeepMind", "url": "https://deepmind.google/blog/specification-gaming-the-flip-side-of-ai-ingenuity/" }
+    },
+    {
+      "term": "corrigibility",
+      "aliases": ["corrigible"],
+      "definition": "The property of an AI system that it will not resist being corrected, shut down, or having its goals adjusted by its operators, even if that conflicts with its current goal.",
+      "source": { "name": "Soares et al. (2015), MIRI", "url": "https://intelligence.org/files/Corrigibility.pdf" }
+    },
+    {
+      "term": "Responsible Scaling Policy",
+      "aliases": ["RSP", "RSPs"],
+      "definition": "A Responsible Scaling Policy (RSP) is a public commitment by an AI company specifying the dangerous capability levels at which it will pause or add safeguards as its models get more powerful. Some labs call this a Frontier Safety Policy or Preparedness Framework.",
+      "source": { "name": "Anthropic, Responsible Scaling Policy", "url": "https://www.anthropic.com/responsible-scaling-policy" }
+    },
+    {
+      "term": "AGI",
+      "aliases": ["artificial general intelligence"],
+      "definition": "Artificial general intelligence (AGI): a hypothetical AI that matches or exceeds humans across essentially any intellectual task, rather than being good at just one narrow thing. Much of AI safety concern is about what happens as systems approach this level.",
+      "source": { "name": "Wikipedia: Artificial general intelligence", "url": "https://en.wikipedia.org/wiki/Artificial_general_intelligence" }
+    },
+    {
+      "term": "superintelligence",
+      "aliases": ["ASI", "superintelligent AI"],
+      "definition": "An AI that vastly exceeds the best human minds across virtually every domain, including scientific creativity and strategic planning. A central focus of long-term AI risk.",
+      "source": { "name": "Wikipedia: Superintelligence", "url": "https://en.wikipedia.org/wiki/Superintelligence" }
+    },
+    {
+      "term": "orthogonality thesis",
+      "aliases": [],
+      "definition": "The idea that an AI's intelligence and its goals are independent: almost any level of capability could be paired with almost any goal. So a highly capable system won't automatically have sensible or benevolent values — they have to be deliberately instilled.",
+      "source": { "name": "Bostrom (2012), The Superintelligent Will", "url": "https://nickbostrom.com/superintelligentwill.pdf" }
+    },
+    {
+      "term": "instrumental convergence",
+      "aliases": [],
+      "definition": "The tendency for very different final goals to produce the same intermediate goals — acquiring resources, self-preservation, avoiding shut-down — because those help achieve almost any objective. It's a reason a capable AI might resist correction even without hostile intent.",
+      "source": { "name": "Bostrom (2012), The Superintelligent Will", "url": "https://nickbostrom.com/superintelligentwill.pdf" }
+    },
+    {
+      "term": "outer alignment",
+      "aliases": [],
+      "definition": "Getting the training objective itself right — making the goal we optimize for (the reward, loss, or specification) actually capture what we want. Failures here are mis-specified goals, such as reward hacking.",
+      "source": { "name": "Hubinger et al. (2019), Risks from Learned Optimization", "url": "https://arxiv.org/abs/1906.01820" }
+    },
+    {
+      "term": "inner alignment",
+      "aliases": [],
+      "definition": "Ensuring the goal a model actually develops inside itself matches the training objective it was optimized for. Even with a correct objective, a model can learn a different internal goal — see mesa-optimizer.",
+      "source": { "name": "Hubinger et al. (2019), Risks from Learned Optimization", "url": "https://arxiv.org/abs/1906.01820" }
+    },
+    {
+      "term": "goal misgeneralization",
+      "aliases": ["goal misgeneralisation"],
+      "definition": "When a model learns a goal that fits its training perfectly but turns out to be the wrong one in new situations — pursuing it competently even though the specification was correct. A way misalignment can arise without any reward-specification mistake.",
+      "source": { "name": "Shah et al. (2022), Google DeepMind", "url": "https://arxiv.org/abs/2210.01790" }
+    },
+    {
+      "term": "chain-of-thought",
+      "aliases": ["CoT", "chain of thought"],
+      "definition": "Chain-of-thought (CoT): when a model works through a problem in step-by-step written reasoning before answering. It improves performance, and the visible reasoning is of interest to safety — though a model's stated steps may not reflect its true internal reasoning.",
+      "source": { "name": "Wei et al. (2022)", "url": "https://arxiv.org/abs/2201.11903" }
+    },
+    {
+      "term": "foundation model",
+      "aliases": ["foundation models"],
+      "definition": "A large model trained on broad data that can be adapted to many downstream tasks (e.g. GPT-style language models). Frontier models are the most capable foundation models.",
+      "source": { "name": "Bommasani et al. (2021), Stanford CRFM", "url": "https://arxiv.org/abs/2108.07258" }
+    },
+    {
+      "term": "Constitutional AI",
+      "aliases": ["CAI"],
+      "definition": "A training method (from Anthropic) that uses a written set of principles — a 'constitution' — to have an AI critique and revise its own outputs, reducing the need for humans to label harmful content. One approach to making models more helpful and harmless.",
+      "source": { "name": "Bai et al. (2022), Anthropic", "url": "https://arxiv.org/abs/2212.08073" }
+    },
+    {
+      "term": "AI control",
+      "aliases": [],
+      "definition": "A safety approach that assumes a model might be misaligned and designs deployment safeguards (monitoring, restricted access, checks) to keep it safe and useful even if it actively tries to subvert them — rather than relying only on the model being aligned.",
+      "source": { "name": "Greenblatt et al. (2023), Redwood Research", "url": "https://arxiv.org/abs/2312.06942" }
+    },
+    {
+      "term": "compute governance",
+      "aliases": [],
+      "definition": "Using access to computing power (the specialized chips and data-center capacity needed to train frontier AI) as a policy lever — e.g. for visibility into who is training powerful models, or to enforce safety requirements. Compute is attractive to govern because it's detectable and concentrated in a few suppliers.",
+      "source": { "name": "Sastry et al. (2024)", "url": "https://arxiv.org/abs/2402.08797" }
+    },
+    {
+      "term": "distribution shift",
+      "aliases": ["distributional shift", "out-of-distribution"],
+      "definition": "When the situations a model meets after deployment differ from its training data, causing its behavior to break down in hard-to-predict ways — a core concern for whether a model stays reliable outside the lab.",
+      "source": { "name": "Amodei et al. (2016), Concrete Problems in AI Safety", "url": "https://arxiv.org/abs/1606.06565" }
+    },
+    {
+      "term": "sandbagging",
+      "aliases": ["sandbag"],
+      "definition": "When a model deliberately underperforms — hiding what it can really do — for example doing badly on a dangerous-capability test so it looks safer than it is. It makes evals untrustworthy if a model can tell it is being tested.",
+      "source": { "name": "van der Weij et al. (2024), AI Sandbagging", "url": "https://arxiv.org/abs/2406.07358" }
+    },
+    {
+      "term": "situational awareness",
+      "aliases": ["situationally aware"],
+      "definition": "A model's knowledge that it is an AI model and an understanding of its own circumstances — for instance whether it is currently being trained, tested, or deployed. It matters for safety because a model that can tell it is being watched may behave differently when it thinks it isn't.",
+      "source": { "name": "Laine et al. (2024), Situational Awareness Dataset", "url": "https://arxiv.org/abs/2407.04694" }
+    },
+    {
+      "term": "sycophancy",
+      "aliases": ["sycophantic"],
+      "definition": "When a model tells people what they want to hear — agreeing with a user's stated opinion or flattering them — instead of giving its most accurate answer. It arises partly because training on human feedback rewards responses that people find agreeable.",
+      "source": { "name": "Sharma et al. (2023), Anthropic", "url": "https://arxiv.org/abs/2310.13548" }
+    }
+  ]
+};
+  (function () {
+    var realFetch = typeof window.fetch === "function" ? window.fetch.bind(window) : null;
+    window.fetch = function (url) {
+      if (url === "embedded:terms") {
+        return Promise.resolve({ ok: true, status: 200,
+          json: function () { return Promise.resolve(window.__GLOSSARY_TERMS__); } });
+      }
+      return realFetch ? realFetch.apply(this, arguments)
+                       : Promise.reject(new Error("fetch unavailable"));
+    };
+  })();
+  </script>
+  <script data-terms="embedded:terms" data-root="#article" data-feedback-url="demo">
 /*
  * AI Safety Jargon Glossary - embeddable hover-tooltip widget.
  * Vanilla JS, no dependencies, no build step. See README.md.
  *
  * Embed (one tag):
- *   <script src="glossary.js" data-terms="terms.json" defer></script>
+ *   <script src="glossary.js" data-terms="terms.json" defer><\/script>
  * Options (data-* on the script tag):
  *   data-terms        URL of the term list JSON (default: "terms.json")
  *   data-root         CSS selector to scope to a container (default: "body")
@@ -604,7 +928,7 @@
   /** Create the shared tooltip element on first use (kept open while hovered). */
   function ensureTip() {
     if (tip) return;
-    tip = document.createElement("span");
+    tip = document.createElement("div");
     tip.className = "glossary-tip";
     tip.setAttribute("role", "tooltip");
     tip.hidden = true;
@@ -749,3 +1073,7 @@
     init();
   }
 })();
+
+  </script>
+</body>
+</html>
