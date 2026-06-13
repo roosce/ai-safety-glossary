@@ -452,9 +452,40 @@
     });
   }
 
+  // --- behavior-tryit-success: light up #tryit-status when the widget runs ----
+  //
+  // The bookmarklet's glossary-core dispatches "ais-glossary-ready" on document
+  // (detail.count = terms it newly highlighted) when the user clicks their
+  // installed bookmark. We turn the idle #tryit-status into a success pill (CSS
+  // shows it once it's non-empty) and announce it via its role="status" region.
+
+  var tryitSucceeded = false;
+
+  function onGlossaryReady(e) {
+    var status = byId("tryit-status");
+    if (!status) return;
+    var count = (e && e.detail && typeof e.detail.count === "number") ? e.detail.count : null;
+    // Re-clicking the bookmark re-runs the widget and can report 0 new terms
+    // (everything's already highlighted) — don't overwrite an earlier success.
+    if (count === 0 && tryitSucceeded) return;
+    if (count && count > 0) {
+      status.textContent = "✓ It’s working — " + count + " term" + (count === 1 ? "" : "s") +
+        " highlighted on this page. Hover one to read its definition.";
+      tryitSucceeded = true;
+    } else {
+      status.textContent = "✓ Glossary ran — no known terms found on this page.";
+    }
+  }
+
+  function wireTryitSuccess() {
+    if (!byId("tryit-status")) return;
+    document.addEventListener("ais-glossary-ready", onGlossaryReady);
+  }
+
   function init() {
     writeInstallSteps();
     wireDemoTooltips();
+    wireTryitSuccess();
     var refreshCopy = initCopyButton();
     resolveCode()
       .then(function (r) {
