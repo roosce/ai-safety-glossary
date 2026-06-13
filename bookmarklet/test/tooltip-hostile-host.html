@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tooltip repro — fixed tip inside a transformed, clipping host</title>
+<style>
+  body { font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px; color: #1f2430; }
+  /*
+   * Simulates a real-world "hostile" host (e.g. arXiv's MathJax-processed
+   * abstract): an ancestor with `transform` becomes the containing block for
+   * any descendant `position:fixed` element, and `overflow:hidden` clips
+   * whatever escapes it. Before the fix, showTip() re-homed the tooltip INSIDE
+   * this box, so it was mispositioned/clipped and appeared not to show. After
+   * the fix the tip stays anchored to <body>, so it's viewport-fixed and visible.
+   */
+  .host { transform: translateZ(0); overflow: hidden; border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-top: 220px; }
+</style>
+</head>
+<body>
+  <h1>Hover a highlighted term — its tooltip must appear and stay on-screen.</h1>
+  <p>The paragraph below lives inside a transformed, <code>overflow:hidden</code> box (the kind of container that broke the tooltip on arXiv).</p>
+  <blockquote class="host">
+    <p>Modern AI safety work treats AI alignment as the central problem, and labs
+      lean on RLHF and red-teaming to reduce jailbreak risk.</p>
+  </blockquote>
+
+  <!-- Feed the widget its terms the same way build.js does (inlined), then load the real core. -->
+  <script>
+    window.__GLOSSARY_TERMS = { meta: {}, terms: [
+      { term: "AI alignment", definition: "Getting an AI system to pursue its operators' intended goals rather than a learned proxy." },
+      { term: "RLHF", definition: "Reinforcement learning from human feedback — training a model from human preference signals." },
+      { term: "red-teaming", definition: "Deliberately probing a system for failures and unsafe behaviours." },
+      { term: "jailbreak", definition: "A prompt that bypasses a model's safety guardrails." }
+    ]};
+  </script>
+  <script src="../glossary-core.js"></script>
+</body>
+</html>
