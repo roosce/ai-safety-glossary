@@ -86,7 +86,7 @@
         if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
         for (var p = node.parentNode; p && p !== root.parentNode; p = p.parentNode) {
           if (SKIP[p.nodeName]) return NodeFilter.FILTER_REJECT;
-          if (p.classList && p.classList.contains("glossary-term")) return NodeFilter.FILTER_REJECT;
+          if (p.classList && (p.classList.contains("glossary-term") || p.classList.contains("glossary-tip"))) return NodeFilter.FILTER_REJECT;
         }
         return NodeFilter.FILTER_ACCEPT;
       }
@@ -189,7 +189,12 @@
   function showTip(el) {
     ensureTip();
     cancelHide();
-    if (el.nextSibling !== tip) el.insertAdjacentElement("afterend", tip);
+    // Keep the tooltip anchored to <body> (where ensureTip put it). The widget
+    // runs on pages we don't control, where the hovered term can sit inside an
+    // ancestor with transform/filter/contain (e.g. arXiv's MathJax wrappers) —
+    // that ancestor becomes the containing block for position:fixed, and any
+    // overflow:clip on it hides the tip. Re-homing the tip next to the term
+    // would re-expose it to that; staying on <body> keeps it viewport-fixed.
     while (tip.firstChild) tip.removeChild(tip.firstChild);
     tip.appendChild(document.createTextNode(el.dataset.definition));
     if (el.dataset.sourceUrl || el.dataset.sourceName) {
