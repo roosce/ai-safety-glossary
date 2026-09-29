@@ -1,5 +1,10 @@
 # AI Safety Jargon Glossary — hover-tooltip widget
 
+> **This repository has moved and is archived.** Development continues in
+> [`roosce/cecilia-os/projects/ai-safety-glossary`](https://github.com/roosce/cecilia-os/tree/main/projects/ai-safety-glossary).
+>
+> Live site: [ai-safety-glossary.vercel.app](https://ai-safety-glossary.vercel.app/)
+
 A tiny, embeddable widget that adds plain-English hover definitions of AI safety
 terms ("RSP", "SAE", "scalable oversight", "mesa-optimiser"…) to any web page —
 so newcomers don't bounce on jargon.
